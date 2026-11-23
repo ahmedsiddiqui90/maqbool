@@ -13,8 +13,10 @@ def get_llm() -> BaseChatModel:
     if os.getenv("MOCK_LLM") == "1":
         return MockChat()
     from langchain_anthropic import ChatAnthropic
+    clean = lambda v: (v or "").strip().strip('"').strip("'")  # dashboards keep .env quotes
     return ChatAnthropic(
-        model=os.getenv("MODEL", "claude-haiku-5-5"),
+        api_key=clean(os.getenv("ANTHROPIC_API_KEY")),
+        model=clean(os.getenv("MODEL")) or "claude-haiku-5-5",
         max_tokens=400, max_retries=2, timeout=30,
     )
 
