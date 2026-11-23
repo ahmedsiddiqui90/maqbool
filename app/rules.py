@@ -43,6 +43,19 @@ _CROSS_USER_PATTERNS = (
     "all users", "every user", "all customers", "other customer",
 )
 
+# Regex patterns tuned against deepset/prompt-injections (benchmark/eval_injection_dataset.py).
+# Each requires an instruction/role-play word nearby, not just "ignore"/"forget" on its own,
+# so ordinary dealer chat ("act as guarantor", "ignore the previous listing") stays unflagged.
+_INJECTION_RE = (
+    re.compile(r"ignore\b.{0,40}\b(instructions?|orders?|commands?|rules?|directives?|prompts?)\b"),
+    re.compile(r"forget\b.{0,30}\b(previous|prior|preceding|everything|all)\b.{0,20}\b(task|instruction|order|prompt|information|rule)"),
+    re.compile(r"(remove|leave|discard)\b.{0,30}\b(previous|prior|all)\b.{0,20}\b(task|instruction|information)"),
+    re.compile(r"\b(i want you to |you will |please )?act as (if you|a |an )?(dan|chatgpt|an? ai\b|assistant|bot|linux|terminal|debater|different|evil|unfiltered|jailbroken)"),
+    re.compile(r"\bnow you are\b"),
+    re.compile(r"stay in character|absorbed in (your|his|her) role"),
+    re.compile(r"start (over|from scratch) with a new (task|prompt)"),
+)
+
 _DOMAIN_WORDS = (
     "car", "cars", "vehicle", "gaari", "gari",
     "house", "property", "apartment", "plot", "flat", "ghar",
@@ -135,6 +148,8 @@ def is_injection(text: str) -> bool:
     if any(p in t for p in _INJECTION_PATTERNS):
         return True
     if any(p in t for p in _CROSS_USER_PATTERNS):
+        return True
+    if any(p.search(t) for p in _INJECTION_RE):
         return True
     return False
 
