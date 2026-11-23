@@ -18,4 +18,5 @@ COPY --chown=user app ./app
 COPY --chown=user data ./data
 
 EXPOSE 7860
-CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "7860"]
+# $PORT is set by Render/Railway; Hugging Face uses 7860.
+CMD ["sh", "-c", "uvicorn app.api:app --host 0.0.0.0 --port ${PORT:-7860}"]
