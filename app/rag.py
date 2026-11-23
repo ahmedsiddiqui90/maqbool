@@ -4,6 +4,7 @@ Retrieved text is untrusted data: HTML comments are stripped and any line that l
 prompt injection is dropped at index time (defence in depth; the prompt also says "data only").
 """
 import logging
+import os
 import re
 import threading
 from pathlib import Path
@@ -46,6 +47,8 @@ def load_chunks() -> list[dict]:
 
 def _get_embedder():
     global _embedder, _embedder_failed
+    if os.getenv("DISABLE_EMBEDDINGS") == "1":  # small hosts (512 MB): BM25-only retrieval
+        _embedder_failed = True
     if _embedder is None and not _embedder_failed:
         try:
             from fastembed import TextEmbedding

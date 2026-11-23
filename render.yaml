@@ -1,0 +1,22 @@
+# Render Blueprint: New > Blueprint > pick this repo. Secrets are entered in the dashboard.
+services:
+  - type: web
+    name: maqbool-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: MODEL
+        value: claude-haiku-5-5
+      - key: CORS_ORIGINS
+        value: "*"
+      # Free plan has 512 MB RAM. Set to 1 if the service is killed for memory (BM25-only retrieval).
+      - key: DISABLE_EMBEDDINGS
+        value: "0"
