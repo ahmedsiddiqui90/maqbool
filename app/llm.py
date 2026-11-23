@@ -15,7 +15,7 @@ def get_llm() -> BaseChatModel:
     from langchain_anthropic import ChatAnthropic
     return ChatAnthropic(
         model=os.getenv("MODEL", "claude-haiku-5-5"),
-        max_tokens=400, temperature=0, max_retries=2, timeout=30,
+        max_tokens=400, max_retries=2, timeout=30,
     )
 
 
