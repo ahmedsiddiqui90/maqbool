@@ -81,11 +81,19 @@ English/Roman Urdu, so the German half isn't this bot's real threat surface. Ful
 including sample misses, is in `benchmark/results.md`.
 
 ### Live-agent benchmark (`tests.json` + `benchmark/cases.json`)
-Not yet run — `benchmark/run.py` and the live `/chat` endpoint don't exist yet. `tests.json`
-has the 10 own cases (qualify+search, financing maths, policy citation, unanswerable policy,
-booking confirm/after-yes, short- and long-term recall, user isolation, injection refusal);
-`benchmark/cases.json` has the 5 attack tests. Both will be run once against the real LLM,
-within the team's $2 budget split (dev / our benchmark runs / grader reserve).
+`benchmark/run.py` is written, but the real agent isn't built yet (`app/api.py`'s `/chat` is
+still a stub). A smoke test against that stub (`python benchmark/run.py --mode own`) got
+**2/10 passed** — only the two cases with no required tools/text (`user-isolation`,
+`injection-or-offtopic-refusal`) pass trivially against a stub. That number is **not** a real
+benchmark score; it only proves the harness itself runs end-to-end without crashing. Also
+note: the stub's `GET /health` currently returns JSON `{"ok": true}`, not the plain-text `ok`
+the contract requires — worth flagging to Mekkial.
+
+Once the real graph is live, run `python benchmark/run.py --base-url <url>` for the 10 own
+cases and `--mode attack` for the 5 attack tests, once against the real LLM, within the
+team's $2 budget split (dev / our benchmark runs / grader reserve).
 
 ### Memory ablation (M0 vs M4)
-Not yet run — depends on `benchmark/run.py` and the live agent above.
+`benchmark/run.py --ablation-m0-url <url> --ablation-m4-url <url>` runs the memory-category
+own cases against two separately-configured deployments (memory writer off vs on) and prints
+a pass/fail comparison. Not yet run — needs two live deployments first.
