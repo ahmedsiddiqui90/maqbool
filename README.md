@@ -33,6 +33,13 @@ copy of [`deepset/prompt-injections`](https://huggingface.co/datasets/deepset/pr
 (Apache-2.0, 662 labelled prompts), fetched via the Hugging Face datasets-server API by
 `benchmark/eval_injection_dataset.py` — see that script for how to refetch it.
 
+**Why the listings stayed synthetic:** we looked at importing real rows (`inria-soda/carte-benchmark`'s
+`used_cars_pakistan` table, sourced from a Kaggle PakWheels scrape; and `opendata.com.pk`'s
+`pakistan-used-cars` dataset, an OLX scrape) for demo credibility. Both list their license as
+unspecified/unknown at the source, so we didn't redistribute rows from either into this public
+repo. The real price distribution (≈PKR 300k–9.7M for used cars) did confirm our synthetic
+price ranges are realistic, which is the credibility this was meant to buy anyway.
+
 ## Memory design
 - **Short-term** (per `thread_id`): the LangGraph checkpointer. Pinned fields (`budget`,
   `kind`, `city`, `timeline`, `pending_listing`) live in typed state so they survive message
