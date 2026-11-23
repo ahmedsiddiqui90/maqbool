@@ -1,0 +1,10 @@
+.venv
+.git
+.env
+frontend
+node_modules
+__pycache__
+*.pyc
+benchmark
+tests
+plan.md
