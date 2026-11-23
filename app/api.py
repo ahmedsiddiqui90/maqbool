@@ -19,6 +19,7 @@ from .graph import FALLBACK_REPLY, build_graph
 from .trace import TurnRecorder
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("maqbool.api")
 
 _graph = None
@@ -39,7 +40,13 @@ async def lifespan(app: FastAPI):
     from langgraph.checkpoint.postgres import PostgresSaver
     from langgraph.store.postgres import PostgresStore
 
-    db.init_db()
+    if not db.enabled():
+        raise RuntimeError("DATABASE_URL is not set: add it in the host's environment settings")
+    try:
+        db.init_db()
+    except Exception as e:
+        log.error("cannot reach the database (check DATABASE_URL): %s: %s", type(e).__name__, e)
+        raise
     pool = db.get_pool()
     saver, _store = PostgresSaver(pool), PostgresStore(pool)
     saver.setup()

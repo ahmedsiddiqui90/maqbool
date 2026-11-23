@@ -15,8 +15,13 @@ _pool = None
 _lock = threading.Lock()
 
 
+def database_url() -> str:
+    """DATABASE_URL with stray quotes/whitespace removed (dashboards often keep the .env quotes)."""
+    return os.getenv("DATABASE_URL", "").strip().strip('"').strip("'")
+
+
 def enabled() -> bool:
-    return bool(os.getenv("DATABASE_URL"))
+    return bool(database_url())
 
 
 def get_pool():
@@ -29,7 +34,7 @@ def get_pool():
                 from psycopg_pool import ConnectionPool
 
                 _pool = ConnectionPool(
-                    os.environ["DATABASE_URL"],
+                    database_url(),
                     min_size=1,
                     max_size=int(os.getenv("DB_POOL_MAX", "6")),
                     kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row},
