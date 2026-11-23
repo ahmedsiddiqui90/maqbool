@@ -1,0 +1,5 @@
+{
+  "dependencies": ["."],
+  "graphs": { "maqbool": "./app/graph.py:graph" },
+  "env": ".env"
+}

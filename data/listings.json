@@ -1,0 +1,6 @@
+[
+  {"id": "h-001", "kind": "house", "title": "3-bed house, Bahria Town Phase 4", "price": 28000000},
+  {"id": "h-002", "kind": "house", "title": "2-bed apartment, F-11 Islamabad", "price": 19500000},
+  {"id": "c-001", "kind": "car", "title": "2021 Toyota Corolla Altis, 28k km", "price": 6200000},
+  {"id": "c-002", "kind": "car", "title": "2019 Honda Civic, 45k km", "price": 5400000}
+]
