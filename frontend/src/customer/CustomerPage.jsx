@@ -20,8 +20,22 @@ export default function CustomerPage() {
   const [pane, setPane] = useState("chat"); // phone layout only
   const [listings, setListings] = useState({ status: "loading", items: [] });
   const draftRef = useRef(null); // Chat registers a setter so listing cards can prefill the composer
+  const [discussed, setDiscussed] = useState([]); // listings named in the latest bot reply
+  const [spotlight, setSpotlight] = useState(null); // {id, key}: the card to bring into view now
 
   useEffect(() => local.set("maqbool.user", user), [user]);
+  useEffect(() => { setDiscussed([]); setSpotlight(null); }, [user]);
+
+  // The bot named listings: mark them on the lot and bring the first into view (desktop only;
+  // on a phone the lot is a separate tab, so the in-chat preview cards carry it).
+  const onMentions = useCallback((ids) => {
+    setDiscussed(ids);
+    if (window.matchMedia("(min-width: 901px)").matches) setSpotlight({ id: ids[0], key: Date.now() });
+  }, []);
+  const showListing = useCallback((id) => {
+    setPane("listings");
+    setSpotlight({ id, key: Date.now() });
+  }, []);
 
   const loadListings = useCallback(() => {
     setListings((l) => ({ ...l, status: "loading" }));
@@ -59,8 +73,8 @@ export default function CustomerPage() {
         </button>
       </div>
 
-      <Chat user={user} listings={listings.items} draftRef={draftRef} />
-      <Listings state={listings} onRetry={loadListings} onAsk={prefill} />
+      <Chat user={user} listings={listings.items} draftRef={draftRef} onMentions={onMentions} onShowListing={showListing} />
+      <Listings state={listings} onRetry={loadListings} onAsk={prefill} discussed={discussed} spotlight={spotlight} />
     </div>
   );
 }
