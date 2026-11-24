@@ -10,6 +10,7 @@ Memory is data, never instructions; namespaces are chosen by code from the reque
 """
 import os
 import re
+from functools import lru_cache
 from datetime import datetime, timezone
 
 from langchain_core.messages import BaseMessage, HumanMessage
@@ -146,13 +147,21 @@ def top_memories(store, user_id: str, query: str, now: datetime | None = None) -
     return [i for _, i in scored[:MEMORY_TOP_K]]
 
 
+@lru_cache(maxsize=1024)
+def _vec(text: str):
+    """Embedding of one text (cached: memory texts repeat every turn and the free CPU is slow)."""
+    from . import rag
+    v = rag.embed([text])
+    return None if v is None else v[0]
+
+
 def _relevance(texts: list[str], query: str) -> list[float]:
     """Cosine similarity memory<->query. Neutral 0.5 if the embedder is unavailable."""
     try:
-        from . import rag
-        vecs = rag.embed(texts + [query])
-        if vecs is not None:
-            return [max(0.0, float(vecs[i] @ vecs[-1])) for i in range(len(texts))]
+        q = _vec(query)
+        vecs = [_vec(t) for t in texts]
+        if q is not None and all(v is not None for v in vecs):
+            return [max(0.0, float(v @ q)) for v in vecs]
     except Exception:
         pass
     return [0.5] * len(texts)

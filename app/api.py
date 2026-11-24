@@ -138,7 +138,8 @@ def _turn(body: ChatIn, rec: TurnRecorder) -> dict:
             return {"reply": f"I still need your confirmation. {pending.value['question']}",
                     "tool_calls": [], "tokens": {"in": 0, "out": 0}}
         inp = Command(resume=message) if pending is not None else {"messages": [HumanMessage(content=message)]}
-        out = _graph.invoke(inp, cfg)
+        # durability="exit": one checkpoint write per turn instead of one per graph step
+        out = _graph.invoke(inp, cfg, durability="exit")
 
         if out.get("__interrupt__"):
             payload = out["__interrupt__"][0].value
@@ -147,8 +148,7 @@ def _turn(body: ChatIn, rec: TurnRecorder) -> dict:
             reply = _reply_text(next(m for m in reversed(out["messages"]) if isinstance(m, AIMessage)))
 
         try:  # dashboard bookkeeping must never break the chat turn
-            db.touch_thread(uid, tid)
-            db.upsert_lead(uid, tid, _graph.get_state(cfg).values, rules.redact(message))
+            db.record_turn(uid, tid, out, rules.redact(message))
         except Exception:
             log.exception("lead upsert failed")
         return {"reply": reply, "tool_calls": rec.tool_calls, "tokens": rec.tokens}

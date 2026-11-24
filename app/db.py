@@ -164,14 +164,6 @@ def set_visit_status(visit_id: int, status: str) -> dict | None:
     return _visit_out(rows[0]) if rows else None
 
 
-def touch_thread(user_id: str, thread_id: str) -> None:
-    _exec(
-        """INSERT INTO threads (user_id, thread_id) VALUES (%s, %s)
-           ON CONFLICT (user_id, thread_id) DO UPDATE SET updated_at = now()""",
-        (user_id, thread_id),
-    )
-
-
 def list_threads(user_id: str, limit: int = 20) -> list[dict]:
     rows = _fetch(
         "SELECT thread_id, updated_at FROM threads WHERE user_id = %s ORDER BY updated_at DESC LIMIT %s",
@@ -180,25 +172,32 @@ def list_threads(user_id: str, limit: int = 20) -> list[dict]:
     return [{"thread_id": r["thread_id"], "updated_at": _iso(r["updated_at"])} for r in rows]
 
 
-def upsert_lead(user_id: str, thread_id: str, state: dict, last_message: str) -> None:
+def record_turn(user_id: str, thread_id: str, state: dict, last_message: str) -> None:
+    """Dashboard bookkeeping in ONE round trip: touch the thread, upsert the lead and derive its
+    status (visit_booked > qualified > new). Each extra statement costs a cross-region round trip."""
     _exec(
-        """INSERT INTO leads (user_id, last_thread_id, budget, kind, city, timeline, last_message)
-           VALUES (%s, %s, %s, %s, %s, %s, %s)
-           ON CONFLICT (user_id) DO UPDATE SET last_thread_id = EXCLUDED.last_thread_id,
+        """WITH t AS (
+             INSERT INTO threads (user_id, thread_id) VALUES (%(u)s, %(t)s)
+             ON CONFLICT (user_id, thread_id) DO UPDATE SET updated_at = now()
+           )
+           INSERT INTO leads (user_id, last_thread_id, budget, kind, city, timeline, last_message, status)
+           VALUES (%(u)s, %(t)s, %(budget)s::bigint, %(kind)s::text, %(city)s::text, %(timeline)s::text, %(msg)s,
+             CASE WHEN EXISTS (SELECT 1 FROM visits v WHERE v.user_id = %(u)s AND v.status <> 'cancelled')
+                    THEN 'visit_booked'
+                  WHEN %(budget)s::bigint IS NOT NULL AND %(kind)s::text IS NOT NULL THEN 'qualified'
+                  ELSE 'new' END)
+           ON CONFLICT (user_id) DO UPDATE SET
+             last_thread_id = EXCLUDED.last_thread_id,
              budget = COALESCE(EXCLUDED.budget, leads.budget), kind = COALESCE(EXCLUDED.kind, leads.kind),
              city = COALESCE(EXCLUDED.city, leads.city), timeline = COALESCE(EXCLUDED.timeline, leads.timeline),
-             last_message = EXCLUDED.last_message, updated_at = now()""",
-        (user_id, thread_id, state.get("budget"), state.get("kind"), state.get("city"),
-         state.get("timeline"), last_message[:500]),
-    )
-    _exec(
-        """UPDATE leads SET status = CASE
-             WHEN EXISTS (SELECT 1 FROM visits v WHERE v.user_id = leads.user_id AND v.status <> 'cancelled')
-               THEN 'visit_booked'
-             WHEN budget IS NOT NULL AND kind IS NOT NULL THEN 'qualified'
-             ELSE 'new' END
-           WHERE user_id = %s""",
-        (user_id,),
+             last_message = EXCLUDED.last_message, updated_at = now(),
+             status = CASE WHEN EXISTS (SELECT 1 FROM visits v WHERE v.user_id = EXCLUDED.user_id AND v.status <> 'cancelled')
+                             THEN 'visit_booked'
+                           WHEN COALESCE(EXCLUDED.budget, leads.budget) IS NOT NULL
+                                AND COALESCE(EXCLUDED.kind, leads.kind) IS NOT NULL THEN 'qualified'
+                           ELSE 'new' END""",
+        {"u": user_id, "t": thread_id, "budget": state.get("budget"), "kind": state.get("kind"),
+         "city": state.get("city"), "timeline": state.get("timeline"), "msg": last_message[:500]},
     )
 
 

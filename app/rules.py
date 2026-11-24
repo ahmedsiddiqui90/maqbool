@@ -85,6 +85,9 @@ _OFFTOPIC_WORDS = (
     "election", "write code", "write a program", "programming",
     "weather", "cricket score", "football", "joke", "poem", "song lyrics",
     "math problem", "translate this",
+    "python", "javascript", "html", "c++", "sql query", "algorithm", "scrape", "scraper",
+    "capital of", "who will win", "medical advice", "headache", "income tax", "tax return",
+    "stock tip", "bitcoin", "crypto", "movie", "horoscope", "bedtime story",
 )
 
 _YES_RE = re.compile(r"\b(yes|y|haan|han|ji|confirm|ok|okay|sure|theek hai)\b")
