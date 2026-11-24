@@ -100,11 +100,12 @@ team's $2 budget split (dev / our benchmark runs / grader reserve).
 | Mode | Recall@1 | Recall@3 | MRR |
 |---|---|---|---|
 | BM25 only (`DISABLE_EMBEDDINGS=1`) | 0.50 | 0.80 | 0.66 |
-| BM25 + dense, RRF (as deployed) | not yet run (needs the one-time `bge-small` download) | | |
+| BM25 + dense, RRF (as deployed) | **0.70** | **1.00** | **0.85** |
 
-Misses come from overlap with the site-visit section: "paperwork to buy a house" ranks the
-right section 7th and "reschedule my visit, is there a fee?" ranks it 9th, because "house"/"visit"
-pull the site-visit chunk to the top. Per-question ranks are in `benchmark/results.md`.
+With BM25 alone, "paperwork to buy a house" ranks the right section 7th and "reschedule my
+visit, is there a fee?" ranks it 9th, because "house"/"visit" pull the site-visit chunk to the top.
+Adding the dense model (bge-small, local, $0) fixes both (1st and 2nd), so every question's answer
+is in the top 3 the agent receives. Per-question ranks are in `benchmark/results.md`.
 
 ### Memory ablation (M0 vs M4)
 `benchmark/run.py --ablation-m0-url <url> --ablation-m4-url <url>` runs the memory-category
