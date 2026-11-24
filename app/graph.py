@@ -4,6 +4,7 @@ Only the two agent nodes call the LLM; everything else is rule-based ($0). Each 
 exactly one agent, with a per-agent tool allow-list and a step budget (recursion_limit).
 """
 import logging
+import os
 
 from dotenv import load_dotenv
 from langchain.agents import create_agent
@@ -48,6 +49,12 @@ Your only job is to book a test drive or site visit.
 
 PROMPTS = {"sales": SALES_PROMPT, "booking": BOOKING_PROMPT}
 FALLBACK_REPLY = "Sorry, something went wrong on my side. Please try again."
+
+
+def long_term_memory_on() -> bool:
+    """Memory ablation switch (L10): DISABLE_LONG_TERM_MEMORY=1 gives the M0 baseline, where
+    the Store is neither written nor read. Short-term memory (checkpointer + pinned state) stays on."""
+    return os.getenv("DISABLE_LONG_TERM_MEMORY") != "1"
 
 
 def _text(msg) -> str:
@@ -108,7 +115,7 @@ def refuse(state: LeadState) -> dict:
 def memory_writer(state: LeadState, config, *, store: BaseStore | None = None) -> dict:
     """# CUSTOM: L10 write path: gates -> consolidate -> store. Rule-based, no LLM call."""
     facts = state.get("turn_facts") or {}
-    if store is not None and facts:
+    if store is not None and facts and long_term_memory_on():
         try:
             memory.write_facts(store, config["configurable"]["user_id"], facts)
         except Exception:
@@ -125,7 +132,7 @@ def make_agent_node(name: str):
         nonlocal agent
         user_id = config["configurable"]["user_id"]
         query = _last_human(state)
-        mem = memory.top_memories(store, user_id, query) if store is not None else []
+        mem = memory.top_memories(store, user_id, query) if store is not None and long_term_memory_on() else []
         block = memory.memory_block(user_id, mem, state)
         system = PROMPTS[name] + ("\n\n" + block if block else "")
         inp = [SystemMessage(content=system)] + memory.trim_history(state["messages"])
