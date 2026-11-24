@@ -40,6 +40,31 @@ export const TOOL_LABELS = {
   book_visit: "Prepared booking",
 };
 
+// Live transcript wording: what is happening now, and what it was once finished.
+export const TOOL_ACTIVE = {
+  search_listings: "Searching listings",
+  calculate_financing: "Calculating installment",
+  search_policies: "Checking dealer policy",
+  book_visit: "Preparing booking",
+};
+
+/** One short, human line describing a tool call's arguments. */
+export function toolDetail(name, args = {}) {
+  const a = args || {};
+  if (name === "search_listings") {
+    const kind = a.kind === "car" ? "cars" : a.kind === "house" ? "property" : "cars and property";
+    const max = a.max_price && a.max_price < 1e9 ? ` under ${priceShort(a.max_price)}` : "";
+    return `${kind}${max}${a.city ? ` in ${a.city}` : ""}`;
+  }
+  if (name === "calculate_financing") {
+    const bits = [a.price && priceShort(a.price), a.down_payment_pct != null && `${a.down_payment_pct}% down`, a.years && `${a.years} years`];
+    return bits.filter(Boolean).join(", ");
+  }
+  if (name === "search_policies") return a.query ? `“${a.query}”` : "";
+  if (name === "book_visit") return [a.listing_id, a.when].filter(Boolean).join(" · ");
+  return "";
+}
+
 export const LEAD_STATUS = {
   new: "New",
   qualified: "Qualified",

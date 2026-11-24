@@ -44,8 +44,66 @@ async function request(path, { method = "GET", body, token, signal } = {}) {
   return res.json();
 }
 
+// /chat/stream is optional (docs/contracts.md): if the backend doesn't have it, remember that
+// and use /chat for the rest of the session.
+let streamSupported = true;
+
+/**
+ * Send a chat turn and report live progress via onEvent({type: "thinking" | "tool" | "tool_done", ...}).
+ * Resolves with the /chat-shaped result either way. `streamed` tells the caller whether progress was real.
+ */
+async function chatWithProgress(user_id, thread_id, message, onEvent = () => {}) {
+  const body = { user_id, thread_id, message };
+  if (streamSupported) {
+    let res;
+    try {
+      res = await fetch(API_URL + "/chat/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+        body: JSON.stringify(body),
+      });
+    } catch {
+      res = null; // network trouble: let /chat produce the proper error message
+    }
+    if (res && (res.status === 404 || res.status === 405)) streamSupported = false;
+    if (res && res.ok && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      let sawEvent = false;
+      try {
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          let cut;
+          while ((cut = buf.indexOf("\n\n")) >= 0) {
+            const chunk = buf.slice(0, cut);
+            buf = buf.slice(cut + 2);
+            const line = chunk.split("\n").find((l) => l.startsWith("data: "));
+            if (!line) continue;
+            let event;
+            try { event = JSON.parse(line.slice(6)); } catch { continue; }
+            sawEvent = true;
+            if (event.type === "done") return { ...event.result, streamed: true };
+            onEvent(event);
+          }
+        }
+      } catch {
+        /* stream dropped */
+      }
+      // The stream ended without a result. If the turn already ran, re-sending it would book or
+      // write twice, so only fall back when nothing arrived at all.
+      if (sawEvent) throw new ApiError("The connection dropped before the reply arrived. Please check the chat and try again.", 0);
+    }
+  }
+  const result = await request("/chat", { method: "POST", body });
+  return { ...result, streamed: false };
+}
+
 export const api = {
   chat: (user_id, thread_id, message) => request("/chat", { method: "POST", body: { user_id, thread_id, message } }),
+  chatWithProgress,
   listings: () => request("/listings"),
   admin: {
     stats: (t) => request("/admin/stats", { token: t }),

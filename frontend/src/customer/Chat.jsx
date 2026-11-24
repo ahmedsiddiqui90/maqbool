@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowUp, Calculator, CalendarCheck, Car, FileText, House, Plus, Search } from "lucide-react";
+import { ArrowUp, Calculator, CalendarCheck, Car, Check, FileText, House, LoaderCircle, LocateFixed, Plus, Search, Sparkles } from "lucide-react";
 import { api } from "../api.js";
-import { TOOL_LABELS, ago } from "../format.js";
+import { TOOL_ACTIVE, TOOL_LABELS, ago, toolDetail } from "../format.js";
+import ListingPlate from "../ui/ListingPlate.jsx";
 import { PriceBoard, RichText, Stamp } from "../ui/bits.jsx";
 import { useThreads } from "./useThreads.js";
 
@@ -19,10 +20,40 @@ const isConfirmPrompt = (reply, tools) =>
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-export default function Chat({ user, listings, draftRef }) {
+/** Listings a reply refers to, by id ("c-002") or by name ("2019 Honda Civic"). */
+export function findMentions(text, listings, max = 4) {
+  const t = String(text || "").toLowerCase();
+  const found = [];
+  for (const l of listings) {
+    const name = l.title.split(",")[0].trim().toLowerCase();
+    const at = Math.min(...[t.indexOf(l.id.toLowerCase()), name.length > 8 ? t.indexOf(name) : -1].map((i) => (i < 0 ? Infinity : i)));
+    if (at !== Infinity) found.push([at, l.id]);
+  }
+  return found.sort((a, b) => a[0] - b[0]).map(([, id]) => id).slice(0, max);
+}
+
+/** Apply one /chat/stream progress event to the live transcript. */
+function step(steps, ev) {
+  const settle = (list) => list.map((s) => (s.kind === "thinking" ? { ...s, done: true } : s));
+  if (ev.type === "thinking") {
+    const last = steps[steps.length - 1];
+    if (last && last.kind === "thinking" && !last.done) return steps;
+    return [...settle(steps), { id: uid(), kind: "thinking", done: false }];
+  }
+  if (ev.type === "tool") return [...settle(steps), { id: uid(), kind: "tool", name: ev.name, args: ev.args, done: false }];
+  if (ev.type === "tool_done") {
+    const i = steps.map((s) => s.kind === "tool" && !s.done && (!ev.name || s.name === ev.name)).lastIndexOf(true);
+    return i < 0 ? steps : steps.map((s, j) => (j === i ? { ...s, done: true } : s));
+  }
+  return steps;
+}
+
+export default function Chat({ user, listings, draftRef, onMentions, onShowListing }) {
   const { threads, active, setActiveId, update, start } = useThreads(user);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(null); // thread id awaiting a reply
+  const [steps, setSteps] = useState([]); // live transcript for the pending turn
+  const [streamed, setStreamed] = useState(false);
   const [slow, setSlow] = useState(false);
   const logRef = useRef(null);
   const inputRef = useRef(null);
@@ -41,8 +72,8 @@ export default function Chat({ user, listings, draftRef }) {
 
   useLayoutEffect(() => {
     const el = logRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages.length, busy, active?.id]);
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }, [messages.length, busy, steps.length, active?.id]);
 
   useEffect(() => {
     if (!busy) { setSlow(false); return; }
@@ -72,18 +103,26 @@ export default function Chat({ user, listings, draftRef }) {
       ],
     }));
     setPending(threadId);
+    setSteps([]);
+    setStreamed(false);
     try {
-      const res = await api.chat(user, threadId, text);
+      const res = await api.chatWithProgress(user, threadId, text, (ev) => {
+        setStreamed(true);
+        setSteps((s) => step(s, ev));
+      });
       const tools = Array.isArray(res.tool_calls) ? res.tool_calls : [];
       const reply = String(res.reply || "");
+      const mentions = findMentions(reply, listings);
       update(threadId, (t) => ({
         ...t,
-        messages: [...t.messages, { id: uid(), role: "bot", text: reply, tools, confirm: isConfirmPrompt(reply, tools) ? "open" : undefined }],
+        messages: [...t.messages, { id: uid(), role: "bot", text: reply, tools, mentions, confirm: isConfirmPrompt(reply, tools) ? "open" : undefined }],
       }));
+      if (mentions.length) onMentions?.(mentions);
     } catch (e) {
       update(threadId, (t) => ({ ...t, messages: [...t.messages, { id: uid(), role: "bot", error: true, text: e.message, retry: text }] }));
     } finally {
       setPending(null);
+      setSteps([]);
       inputRef.current?.focus();
     }
   }
@@ -145,16 +184,11 @@ export default function Chat({ user, listings, draftRef }) {
               <button type="button" className="btn btn-quiet btn-sm" onClick={() => retry(m)} disabled={!!pending}>Send again</button>
             </div>
           ) : (
-            <BotMessage key={m.id} m={m} byId={byId} onAnswer={send} disabled={!!pending} />
+            <BotMessage key={m.id} m={m} byId={byId} listings={listings} onAnswer={send} onShowListing={onShowListing} disabled={!!pending} />
           ),
         )}
 
-        {busy && (
-          <div className="msg msg-bot msg-typing" role="status">
-            <span className="dots" aria-hidden="true"><i /><i /><i /></span>
-            <span>{slow ? "Waking up the server. The first reply can take up to a minute." : "Maqbool is replying…"}</span>
-          </div>
-        )}
+        {busy && <LiveTranscript steps={steps} streamed={streamed} slow={slow} />}
       </div>
 
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(); }}>
@@ -184,8 +218,40 @@ export default function Chat({ user, listings, draftRef }) {
   );
 }
 
-function BotMessage({ m, byId, onAnswer, disabled }) {
-  const ids = [...new Set((m.text.match(/\b[ch]-\d{3}\b/g) || []))].filter((id) => byId[id]).slice(0, 4);
+/** What Maqbool is doing right now, step by step (real events from /chat/stream when available). */
+function LiveTranscript({ steps, streamed, slow }) {
+  const shown = steps.length ? steps : [{ id: "wait", kind: "thinking", done: false }];
+  return (
+    <div className="transcript-live" role="status" aria-label="Maqbool is working">
+      <ol>
+        {shown.map((s) => {
+          const Icon = s.kind === "tool" ? TOOL_ICONS[s.name] || Search : Sparkles;
+          const label = s.kind === "tool"
+            ? (s.done ? TOOL_LABELS[s.name] : TOOL_ACTIVE[s.name]) || s.name
+            : s.done ? "Thought it through" : "Thinking";
+          const detail = s.kind === "tool" ? toolDetail(s.name, s.args) : "";
+          return (
+            <li key={s.id} className={s.done ? "is-done" : "is-active"}>
+              <span className="step-mark" aria-hidden="true">
+                {s.done ? <Check size={14} /> : <LoaderCircle size={14} className="spin" />}
+              </span>
+              <Icon size={14} aria-hidden="true" className="step-icon" />
+              <span className="step-label">{label}{!s.done && "…"}</span>
+              {detail && <span className="step-detail">{detail}</span>}
+            </li>
+          );
+        })}
+      </ol>
+      {slow && !streamed && steps.length === 0 && (
+        <p className="transcript-note">Waking up the server. The first reply can take up to a minute.</p>
+      )}
+    </div>
+  );
+}
+
+function BotMessage({ m, byId, listings, onAnswer, onShowListing, disabled }) {
+  // Older saved chats have no `mentions`; derive them the same way.
+  const ids = (m.mentions || findMentions(m.text, listings)).filter((id) => byId[id]);
   return (
     <div className={`msg msg-bot${m.confirm ? " msg-confirm" : ""}`}>
       {m.confirm === "open" && <Stamp tone="stop">Awaiting your yes</Stamp>}
@@ -198,9 +264,16 @@ function BotMessage({ m, byId, onAnswer, disabled }) {
             const l = byId[id];
             return (
               <li key={id} className="mention">
-                <span className="mention-title">{l.title}</span>
-                <span className="mention-meta">{l.id} · {l.city}</span>
-                <PriceBoard price={l.price} size="sm" />
+                <ListingPlate listing={l} className="plate-thumb" />
+                <div className="mention-body">
+                  <span className="mention-title">{l.title}</span>
+                  <span className="mention-meta">{l.id} · {l.city}</span>
+                  <PriceBoard price={l.price} size="sm" />
+                </div>
+                <button type="button" className="btn btn-quiet btn-sm mention-show" onClick={() => onShowListing?.(id)}
+                        aria-label={`Show ${l.title} on the lot`}>
+                  <LocateFixed size={15} aria-hidden="true" /> Show
+                </button>
               </li>
             );
           })}
@@ -218,9 +291,12 @@ function BotMessage({ m, byId, onAnswer, disabled }) {
         <ul className="tool-trail" aria-label="What Maqbool checked">
           {m.tools.map((t, i) => {
             const Icon = TOOL_ICONS[t.name] || Search;
+            const detail = toolDetail(t.name, t.args);
             return (
-              <li key={i} title={JSON.stringify(t.args)}>
-                <Icon size={14} aria-hidden="true" /> {TOOL_LABELS[t.name] || t.name}
+              <li key={i}>
+                <Icon size={14} aria-hidden="true" />
+                <span>{TOOL_LABELS[t.name] || t.name}</span>
+                {detail && <span className="trail-detail">{detail}</span>}
               </li>
             );
           })}
