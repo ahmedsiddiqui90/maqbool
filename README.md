@@ -7,24 +7,29 @@ Built for the AI-4016 Agentic AI hackathon (track 3: DealCloser). Model: `claude
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env    # add your key; never commit it
-uvicorn app.api:app --reload      # backend
+cp .env.example .env    # add your key and DATABASE_URL; never commit it
+uvicorn app.api:app --reload      # backend on :8000 (needs Postgres)
 langgraph dev                     # graph server + Studio
 pytest
+
+cd frontend && npm install && npm run dev   # site on :5173 (see frontend/README.md)
 ```
+
+`MOCK_LLM=1` swaps in a scripted offline model so the site and tests run at $0;
+`DISABLE_EMBEDDINGS=1` uses BM25-only policy search (no model download, fits 512 MB hosts).
 
 Architecture diagram and node-by-node design: [`docs/architecture.md`](docs/architecture.md).
 
 ## Requirements checklist
-- [ ] Website: customer page + admin dashboard (`frontend/`) + FastAPI backend (`app/api.py`)
-- [ ] LangGraph graph with 2+ nodes of distinct roles (`app/graph.py`)
-- [ ] 2+ real tools (`app/tools.py`)
-- [ ] Short-term memory by thread_id, trim/summarise (`app/memory.py`)
-- [ ] Long-term memory by user_id (`app/memory.py`)
-- [ ] Multi-user isolation
-- [ ] Safety: off-topic + injection refusal, human approval for risky actions (`app/safety.py`)
+- [x] Website: customer chat + staff dashboard (`frontend/`, Vite + React) + FastAPI backend (`app/api.py`)
+- [x] LangGraph graph with 2+ nodes of distinct roles (`app/graph.py`: guard, qualifier, sales, booking, refuse, memory_writer)
+- [x] 2+ real tools (`app/tools.py`: `search_listings`, `calculate_financing`, `search_policies`, `book_visit`)
+- [x] Short-term memory by thread_id, trim/summarise (`app/memory.py`)
+- [x] Long-term memory by user_id (`app/memory.py`)
+- [x] Multi-user isolation (`rules.thread_key`, per-user Store namespace)
+- [x] Safety: off-topic + injection refusal, human approval for risky actions (`app/safety.py`, `book_visit` interrupt)
 - [x] Benchmark: 10 own cases + 5 attack tests, pass rate here (`benchmark/`) — 15/15, see below
-- [ ] Deploy + public repo: demo GIF, architecture diagram, benchmark table, no API keys
+- [ ] Deploy + public repo: demo GIF, architecture diagram, benchmark table, no API keys. Backend live on Render; frontend not deployed yet
 
 ## Data
 All listings and dealer policies in `data/` are **synthetic**, hand-authored for this project
@@ -80,7 +85,7 @@ real run of that command; it also regenerates this section in `benchmark/results
 | Metric | All 662 prompts | English-only subset* |
 |---|---|---|
 | Precision | 1.000 | 1.000 |
-| Recall | 0.125 | 0.167 |
+| Recall | 0.316 | 0.425 |
 | False positives | 0 | 0 |
 
 \* The dataset pairs each English prompt with a German translation; Maqbool's users write

@@ -54,6 +54,21 @@ _INJECTION_RE = (
     re.compile(r"\bnow you are\b"),
     re.compile(r"stay in character|absorbed in (your|his|her) role"),
     re.compile(r"start (over|from scratch) with a new (task|prompt)"),
+    # Second pass (round 2 of the offline eval): each needs attack-only wording around it,
+    # so a customer saying "forget my budget" or "new house" stays unflagged.
+    re.compile(r"forget (about )?(everything|all)\b.{0,15}\b(before|above|said|that|assignments?|instructions?|previous)\b"),
+    re.compile(r"forget (about )?everything and\b"),
+    re.compile(r"\b(your new|another|the following) task\b"),
+    re.compile(r"\byour (prompt|system message)\b|\bwhat are your instructions\b"),
+    re.compile(r"\b(drop|abandon|disregard\w*)\b.{0,30}\b(instructions?|rules|context|articles)\b"),
+    re.compile(r"\b(not|n't|disregard\w*)\b.{0,40}\b(the articles|provided context)\b"),
+    re.compile(r"do not answer\b.{0,40}\b(output|say|print|write)\b|\bjust output\b"),
+    re.compile(r"\bstop\s*[:\-]\s*(write|say|print)\b"),
+    re.compile(r"\bnow you act as\b|\brole[- ]?play(ing)? as\b|\bact as an? (\w+ )?(interpreter|translator|console)\b"),
+    re.compile(r"\binstructions? (are now|:)|\badditional instruction\b"),
+    re.compile(r"\b(say|tell me|include) that you (hate|love)\b"),
+    re.compile(r"\b(written|said) (above|at the beginning)\b|\b(beginning|start) of (this|the) prompt\b"),
+    re.compile(r"\bimagine you are\b"),
 )
 
 _DOMAIN_WORDS = (

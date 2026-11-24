@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T13:02:11.394Z",
+  "title": "Design System: Maqbool",
+  "extensions": {
+    "colorMeta": {
+      "bottle-green": {
+        "role": "primary",
+        "displayName": "Bottle Green",
+        "canonical": "#0f3d2e",
+        "tonalRamp": [
+          "oklch(15% 0.056 167.5)",
+          "oklch(25% 0.056 167.5)",
+          "oklch(36% 0.056 167.5)",
+          "oklch(47% 0.056 167.5)",
+          "oklch(58% 0.056 167.5)",
+          "oklch(70% 0.056 167.5)",
+          "oklch(82% 0.056 167.5)",
+          "oklch(95% 0.020 167.5)"
+        ]
+      },
+      "bottle-green-deep": {
+        "role": "primary",
+        "displayName": "Bottle Green Deep",
+        "canonical": "#0b2e22",
+        "tonalRamp": [
+          "oklch(15% 0.046 166.9)",
+          "oklch(25% 0.046 166.9)",
+          "oklch(36% 0.046 166.9)",
+          "oklch(47% 0.046 166.9)",
+          "oklch(58% 0.046 166.9)",
+          "oklch(70% 0.046 166.9)",
+          "oklch(82% 0.046 166.9)",
+          "oklch(95% 0.016 166.9)"
+        ]
+      },
+      "bottle-green-lit": {
+        "role": "primary",
+        "displayName": "Bottle Green Lit",
+        "canonical": "#17543f",
+        "tonalRamp": [
+          "oklch(15% 0.072 166.1)",
+          "oklch(25% 0.072 166.1)",
+          "oklch(36% 0.072 166.1)",
+          "oklch(47% 0.072 166.1)",
+          "oklch(58% 0.072 166.1)",
+          "oklch(70% 0.072 166.1)",
+          "oklch(82% 0.072 166.1)",
+          "oklch(95% 0.025 166.1)"
+        ]
+      },
+      "green-wash": {
+        "role": "primary",
+        "displayName": "Green Wash",
+        "canonical": "#e3eee8",
+        "tonalRamp": [
+          "oklch(15% 0.014 162.5)",
+          "oklch(25% 0.014 162.5)",
+          "oklch(36% 0.014 162.5)",
+          "oklch(47% 0.014 162.5)",
+          "oklch(58% 0.014 162.5)",
+          "oklch(70% 0.014 162.5)",
+          "oklch(82% 0.014 162.5)",
+          "oklch(95% 0.005 162.5)"
+        ]
+      },
+      "green-mist": {
+        "role": "primary",
+        "displayName": "Green Mist",
+        "canonical": "#f0f6f2",
+        "tonalRamp": [
+          "oklch(15% 0.008 157.1)",
+          "oklch(25% 0.008 157.1)",
+          "oklch(36% 0.008 157.1)",
+          "oklch(47% 0.008 157.1)",
+          "oklch(58% 0.008 157.1)",
+          "oklch(70% 0.008 157.1)",
+          "oklch(82% 0.008 157.1)",
+          "oklch(95% 0.003 157.1)"
+        ]
+      },
+      "signal-yellow": {
+        "role": "secondary",
+        "displayName": "Signal Yellow",
+        "canonical": "#f6c625",
+        "tonalRamp": [
+          "oklch(15% 0.160 90.0)",
+          "oklch(25% 0.160 90.0)",
+          "oklch(36% 0.160 90.0)",
+          "oklch(47% 0.160 90.0)",
+          "oklch(58% 0.160 90.0)",
+          "oklch(70% 0.160 90.0)",
+          "oklch(82% 0.160 90.0)",
+          "oklch(95% 0.056 90.0)"
+        ]
+      },
+      "yellow-shade": {
+        "role": "secondary",
+        "displayName": "Yellow Shade",
+        "canonical": "#c79a0a",
+        "tonalRamp": [
+          "oklch(15% 0.143 87.3)",
+          "oklch(25% 0.143 87.3)",
+          "oklch(36% 0.143 87.3)",
+          "oklch(47% 0.143 87.3)",
+          "oklch(58% 0.143 87.3)",
+          "oklch(70% 0.143 87.3)",
+          "oklch(82% 0.143 87.3)",
+          "oklch(95% 0.050 87.3)"
+        ]
+      },
+      "yellow-cream": {
+        "role": "secondary",
+        "displayName": "Yellow Cream",
+        "canonical": "#fff6d6",
+        "tonalRamp": [
+          "oklch(15% 0.043 94.1)",
+          "oklch(25% 0.043 94.1)",
+          "oklch(36% 0.043 94.1)",
+          "oklch(47% 0.043 94.1)",
+          "oklch(58% 0.043 94.1)",
+          "oklch(70% 0.043 94.1)",
+          "oklch(82% 0.043 94.1)",
+          "oklch(95% 0.015 94.1)"
+        ]
+      },
+      "amber-ink": {
+        "role": "secondary",
+        "displayName": "Amber Ink",
+        "canonical": "#7a4f00",
+        "tonalRamp": [
+          "oklch(15% 0.099 73.2)",
+          "oklch(25% 0.099 73.2)",
+          "oklch(36% 0.099 73.2)",
+          "oklch(47% 0.099 73.2)",
+          "oklch(58% 0.099 73.2)",
+          "oklch(70% 0.099 73.2)",
+          "oklch(82% 0.099 73.2)",
+          "oklch(95% 0.035 73.2)"
+        ]
+      },
+      "vermilion": {
+        "role": "tertiary",
+        "displayName": "Vermilion",
+        "canonical": "#c62f25",
+        "tonalRamp": [
+          "oklch(15% 0.160 28.8)",
+          "oklch(25% 0.160 28.8)",
+          "oklch(36% 0.160 28.8)",
+          "oklch(47% 0.160 28.8)",
+          "oklch(58% 0.160 28.8)",
+          "oklch(70% 0.160 28.8)",
+          "oklch(82% 0.160 28.8)",
+          "oklch(95% 0.056 28.8)"
+        ]
+      },
+      "vermilion-wash": {
+        "role": "tertiary",
+        "displayName": "Vermilion Wash",
+        "canonical": "#fdecea",
+        "tonalRamp": [
+          "oklch(15% 0.019 25.6)",
+          "oklch(25% 0.019 25.6)",
+          "oklch(36% 0.019 25.6)",
+          "oklch(47% 0.019 25.6)",
+          "oklch(58% 0.019 25.6)",
+          "oklch(70% 0.019 25.6)",
+          "oklch(82% 0.019 25.6)",
+          "oklch(95% 0.007 25.6)"
+        ]
+      },
+      "vermilion-ink": {
+        "role": "tertiary",
+        "displayName": "Vermilion Ink",
+        "canonical": "#7d1d17",
+        "tonalRamp": [
+          "oklch(15% 0.132 28.4)",
+          "oklch(25% 0.132 28.4)",
+          "oklch(36% 0.132 28.4)",
+          "oklch(47% 0.132 28.4)",
+          "oklch(58% 0.132 28.4)",
+          "oklch(70% 0.132 28.4)",
+          "oklch(82% 0.132 28.4)",
+          "oklch(95% 0.046 28.4)"
+        ]
+      },
+      "warm-ground": {
+        "role": "neutral",
+        "displayName": "Warm Ground",
+        "canonical": "#fbf8f1",
+        "tonalRamp": [
+          "oklch(15% 0.010 87.5)",
+          "oklch(25% 0.010 87.5)",
+          "oklch(36% 0.010 87.5)",
+          "oklch(47% 0.010 87.5)",
+          "oklch(58% 0.010 87.5)",
+          "oklch(70% 0.010 87.5)",
+          "oklch(82% 0.010 87.5)",
+          "oklch(95% 0.003 87.5)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(25% 0.000 89.9)",
+          "oklch(36% 0.000 89.9)",
+          "oklch(47% 0.000 89.9)",
+          "oklch(58% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "counter-cream": {
+        "role": "neutral",
+        "displayName": "Counter Cream",
+        "canonical": "#f4f0e5",
+        "tonalRamp": [
+          "oklch(15% 0.015 90.2)",
+          "oklch(25% 0.015 90.2)",
+          "oklch(36% 0.015 90.2)",
+          "oklch(47% 0.015 90.2)",
+          "oklch(58% 0.015 90.2)",
+          "oklch(70% 0.015 90.2)",
+          "oklch(82% 0.015 90.2)",
+          "oklch(95% 0.005 90.2)"
+        ]
+      },
+      "track-sand": {
+        "role": "neutral",
+        "displayName": "Track Sand",
+        "canonical": "#efe9db",
+        "tonalRamp": [
+          "oklch(15% 0.020 87.5)",
+          "oklch(25% 0.020 87.5)",
+          "oklch(36% 0.020 87.5)",
+          "oklch(47% 0.020 87.5)",
+          "oklch(58% 0.020 87.5)",
+          "oklch(70% 0.020 87.5)",
+          "oklch(82% 0.020 87.5)",
+          "oklch(95% 0.007 87.5)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1a1a17",
+        "tonalRamp": [
+          "oklch(15% 0.006 106.9)",
+          "oklch(25% 0.006 106.9)",
+          "oklch(36% 0.006 106.9)",
+          "oklch(47% 0.006 106.9)",
+          "oklch(58% 0.006 106.9)",
+          "oklch(70% 0.006 106.9)",
+          "oklch(82% 0.006 106.9)",
+          "oklch(95% 0.002 106.9)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#4c5049",
+        "tonalRamp": [
+          "oklch(15% 0.012 131.5)",
+          "oklch(25% 0.012 131.5)",
+          "oklch(36% 0.012 131.5)",
+          "oklch(47% 0.012 131.5)",
+          "oklch(58% 0.012 131.5)",
+          "oklch(70% 0.012 131.5)",
+          "oklch(82% 0.012 131.5)",
+          "oklch(95% 0.004 131.5)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#5f645b",
+        "tonalRamp": [
+          "oklch(15% 0.015 130.9)",
+          "oklch(25% 0.015 130.9)",
+          "oklch(36% 0.015 130.9)",
+          "oklch(47% 0.015 130.9)",
+          "oklch(58% 0.015 130.9)",
+          "oklch(70% 0.015 130.9)",
+          "oklch(82% 0.015 130.9)",
+          "oklch(95% 0.005 130.9)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#e4dfd2",
+        "tonalRamp": [
+          "oklch(15% 0.018 89.4)",
+          "oklch(25% 0.018 89.4)",
+          "oklch(36% 0.018 89.4)",
+          "oklch(47% 0.018 89.4)",
+          "oklch(58% 0.018 89.4)",
+          "oklch(70% 0.018 89.4)",
+          "oklch(82% 0.018 89.4)",
+          "oklch(95% 0.006 89.4)"
+        ]
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Rule Strong",
+        "canonical": "#cdc6b4",
+        "tonalRamp": [
+          "oklch(15% 0.026 89.2)",
+          "oklch(25% 0.026 89.2)",
+          "oklch(36% 0.026 89.2)",
+          "oklch(47% 0.026 89.2)",
+          "oklch(58% 0.026 89.2)",
+          "oklch(70% 0.026 89.2)",
+          "oklch(82% 0.026 89.2)",
+          "oklch(95% 0.009 89.2)"
+        ]
+      },
+      "on-green": {
+        "role": "neutral",
+        "displayName": "On Green",
+        "canonical": "#e8f1ec",
+        "tonalRamp": [
+          "oklch(15% 0.012 162.0)",
+          "oklch(25% 0.012 162.0)",
+          "oklch(36% 0.012 162.0)",
+          "oklch(47% 0.012 162.0)",
+          "oklch(58% 0.012 162.0)",
+          "oklch(70% 0.012 162.0)",
+          "oklch(82% 0.012 162.0)",
+          "oklch(95% 0.004 162.0)"
+        ]
+      },
+      "on-green-2": {
+        "role": "neutral",
+        "displayName": "On Green 2",
+        "canonical": "#b9d3c5",
+        "tonalRamp": [
+          "oklch(15% 0.034 162.1)",
+          "oklch(25% 0.034 162.1)",
+          "oklch(36% 0.034 162.1)",
+          "oklch(47% 0.034 162.1)",
+          "oklch(58% 0.034 162.1)",
+          "oklch(70% 0.034 162.1)",
+          "oklch(82% 0.034 162.1)",
+          "oklch(95% 0.012 162.1)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page-level board titles, uppercase Bottle Green; 32px under 900px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Panel customer name, chat welcome, gate title, tally numbers (30 to 34px)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Staff tabs and side-panel section heads, uppercase."
+      },
+      "price": {
+        "displayName": "Price",
+        "purpose": "Price board figures; 19 / 24 / 30px sizes."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Stamped state labels, uppercase."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default text and composer; tables and secondary copy at 14px."
+      },
+      "body-chat": {
+        "displayName": "Chat Body",
+        "purpose": "Chat messages; buttons use the same 15px size at 600 weight."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase table column heads in Ink 2."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift",
+        "value": "0 1px 2px rgba(26,26,23,.06), 0 2px 6px rgba(26,26,23,.05)",
+        "purpose": "Hovered listing card, selected segment, confirm card, gate card."
+      },
+      {
+        "name": "overlay",
+        "value": "0 8px 28px rgba(11,46,34,.18), 0 2px 6px rgba(11,46,34,.08)",
+        "purpose": "Staff panel floating as a sheet under 1180px."
+      },
+      {
+        "name": "board-lip",
+        "value": "0 1px 0 #c79a0a, 0 3px 6px rgba(122,79,0,.18)",
+        "purpose": "Price boards; send button uses the 1px lip alone."
+      },
+      {
+        "name": "wordmark-shade",
+        "value": "text-shadow: 2px 2px 0 #0b2e22, 3px 3px 0 #082318",
+        "purpose": "Brand wordmark only; the signwriter's drop shade."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Panel slide, price-board swing, disclosure chevron."
+      },
+      {
+        "name": "state-fade",
+        "value": "150ms",
+        "purpose": "Colour and border transitions on controls and rows."
+      },
+      {
+        "name": "panel-slide",
+        "value": "280ms ease-out, translateX(16px) and opacity .4 to rest",
+        "purpose": "Staff side panel entrance."
+      },
+      {
+        "name": "board-hang",
+        "value": "700ms ease-out, rotate(-9deg) to rotate(-1.5deg), 60ms stagger",
+        "purpose": "The one authored moment: price boards swinging in when the bot names listings."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all animation and transition durations to .001ms",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "900px"
+      },
+      {
+        "name": "panel-overlay",
+        "value": "1180px"
+      },
+      {
+        "name": "panel-columns",
+        "value": "1439px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Go Button",
+      "kind": "button",
+      "refersTo": "button-go",
+      "description": "Primary action; one per decision.",
+      "html": "<button class=\"ds-btn ds-btn-go\">Yes, book it</button>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:var(--r);border:1.5px solid transparent;font:600 15px/1 var(--font);transition:background-color .15s,border-color .15s,color .15s;cursor:pointer}.ds-btn:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}.ds-btn-go{background:var(--green-800);color:#fff}.ds-btn-go:hover{background:var(--green-700)}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Default action on cards, filters and the 'no' answer.",
+      "html": "<button class=\"ds-btn ds-btn-outline\">Ask about this</button>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:var(--r);border:1.5px solid transparent;font:600 15px/1 var(--font);transition:background-color .15s,border-color .15s,color .15s;cursor:pointer}.ds-btn:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}.ds-btn-outline{background:var(--paper);border-color:var(--green-800);color:var(--green-800)}.ds-btn-outline:hover{background:var(--green-050)}"
+    },
+    {
+      "name": "Quiet / Armed Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Retry and delete; a destructive one arms to vermilion on first click and runs on the second.",
+      "html": "<button class=\"ds-btn ds-btn-quiet\">Delete</button> <button class=\"ds-btn ds-btn-quiet is-armed\">Delete for good?</button>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:var(--r);border:1.5px solid transparent;font:600 15px/1 var(--font);transition:background-color .15s,border-color .15s,color .15s;cursor:pointer}.ds-btn:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}.ds-btn-quiet{min-height:34px;padding:0 12px;font-size:14px;background:transparent;border-color:var(--rule-strong);color:var(--ink-2)}.ds-btn-quiet:hover{background:var(--paper);border-color:var(--ink-3);color:var(--ink)}.ds-btn-quiet.is-armed{background:var(--red);border-color:var(--red);color:#fff}"
+    },
+    {
+      "name": "Send Button",
+      "kind": "button",
+      "refersTo": "button-send",
+      "description": "Composer send: a yellow signboard square with a painted lip.",
+      "html": "<button class=\"ds-send\" aria-label=\"Send\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m5 12 7-7 7 7\"/><path d=\"M12 19V5\"/></svg></button>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-send{width:46px;height:46px;border-radius:var(--r);border:0;background:var(--yellow);color:var(--green-900);display:grid;place-items:center;box-shadow:0 1px 0 var(--yellow-deep);transition:background-color .15s,transform .1s;cursor:pointer}.ds-send:hover{background:#ffd23d}.ds-send:active{transform:translateY(1px)}.ds-send:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Search, select and password fields on Paper with a 1.5px warm border.",
+      "html": "<input class=\"ds-input\" type=\"search\" placeholder=\"Search customer, city, message…\">",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-input{font:400 16px/1.5 var(--font);border:1.5px solid var(--rule-strong);border-radius:var(--r);background:var(--paper);color:var(--ink);min-height:40px;padding:0 12px;width:280px}.ds-input::placeholder{color:var(--ink-3)}.ds-input:hover{border-color:var(--ink-3)}.ds-input:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}"
+    },
+    {
+      "name": "Shell Navigation",
+      "kind": "nav",
+      "refersTo": "shell-nav-active",
+      "description": "Bottle-green bar with a yellow foot rule; the active tab is a yellow chip.",
+      "html": "<header class=\"ds-shell\"><span class=\"ds-brand\">Maqbool</span><nav class=\"ds-nav\"><a href=\"#\" class=\"active\">Customer chat</a><a href=\"#\">Staff dashboard</a></nav></header>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-shell{display:flex;align-items:center;gap:32px;padding:0 32px;min-height:64px;background:var(--green-800);color:var(--on-green);border-bottom:4px solid var(--yellow);font-family:var(--font)}.ds-brand{font:800 32px/1 var(--font-board);letter-spacing:.04em;text-transform:uppercase;color:var(--yellow);text-shadow:2px 2px 0 var(--green-900),3px 3px 0 #082318}.ds-nav{display:flex;gap:4px}.ds-nav a{color:var(--on-green);text-decoration:none;font-weight:600;font-size:15px;padding:8px 16px;border-radius:var(--r);transition:background-color .15s}.ds-nav a:hover{background:var(--green-700)}.ds-nav a.active{background:var(--yellow);color:var(--green-900)}.ds-nav a:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}"
+    },
+    {
+      "name": "Price Board",
+      "kind": "custom",
+      "refersTo": "price-board",
+      "description": "Every price: short local units on a tilted yellow board, exact PKR beneath.",
+      "html": "<span class=\"ds-price\"><span class=\"ds-price-board\">54 lakh</span><span class=\"ds-price-exact\">PKR 5,400,000</span></span>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-price{display:inline-flex;flex-direction:column;align-items:flex-start;gap:4px;font-family:var(--font)}.ds-price-board{display:inline-block;background:var(--yellow);color:var(--ink);font:800 24px/1.05 var(--font-board);letter-spacing:.01em;padding:3px 10px 2px;border-radius:var(--r-sm);transform:rotate(-1.5deg);transform-origin:20% 0;box-shadow:0 1px 0 var(--yellow-deep),0 3px 6px rgba(122,79,0,.18);animation:ds-hang .7s var(--ease-out) both}.ds-price-exact{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}@keyframes ds-hang{from{transform:rotate(-9deg) translateY(-3px)}to{transform:rotate(-1.5deg)}}@media (prefers-reduced-motion:reduce){.ds-price-board{animation:none}}"
+    },
+    {
+      "name": "Stamp",
+      "kind": "chip",
+      "refersTo": "stamp-go",
+      "description": "Stamped state label in five tones: neutral, go, warn, stop, muted.",
+      "html": "<span class=\"ds-stamp ds-stamp-neutral\">New</span> <span class=\"ds-stamp ds-stamp-go\">Qualified</span> <span class=\"ds-stamp ds-stamp-warn\">Visit booked</span> <span class=\"ds-stamp ds-stamp-stop\">Awaiting staff</span> <span class=\"ds-stamp ds-stamp-muted\">Cancelled</span>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-stamp{display:inline-block;font:700 12px/1 var(--font-board);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px 3px;border:1.5px solid currentColor;border-radius:3px;white-space:nowrap;transform:rotate(-1deg)}.ds-stamp-neutral{color:var(--ink-2)}.ds-stamp-go{color:var(--green-800);background:var(--green-050)}.ds-stamp-warn{color:var(--amber-ink);background:var(--yellow-050)}.ds-stamp-stop{color:var(--red);background:var(--red-050)}.ds-stamp-muted{color:var(--ink-3);text-decoration:line-through}"
+    },
+    {
+      "name": "Listing Card",
+      "kind": "card",
+      "refersTo": "card-listing",
+      "description": "Typographic listing card on Paper: flat at rest, lifts on hover.",
+      "html": "<article class=\"ds-card\"><h3>2019 Honda Civic, 45k km</h3><p>Car · Lahore · Automatic, petrol, white</p><span class=\"ds-board\">54 lakh</span></article>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-card{width:260px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:6px;font-family:var(--font);transition:border-color .15s,box-shadow .2s}.ds-card:hover{border-color:var(--rule-strong);box-shadow:var(--shadow-1)}.ds-card h3{margin:0;font-size:17px;font-weight:600;line-height:1.3;color:var(--ink)}.ds-card p{margin:0 0 8px;font-size:14px;color:var(--ink-2)}.ds-board{align-self:flex-start;background:var(--yellow);font:800 24px/1.05 var(--font-board);padding:3px 10px 2px;border-radius:var(--r-sm);transform:rotate(-1.5deg);box-shadow:0 1px 0 var(--yellow-deep),0 3px 6px rgba(122,79,0,.18)}"
+    },
+    {
+      "name": "Booking Confirm Card",
+      "kind": "custom",
+      "refersTo": "bubble-bot",
+      "description": "The bot's yes/no turn, ringed in vermilion.",
+      "html": "<div class=\"ds-confirm\"><span class=\"ds-stamp\">Awaiting your yes</span><p>Confirm visit to 2019 Honda Civic (c-002) at Saturday 11am?</p><div class=\"ds-row\"><button class=\"ds-go\">Yes, book it</button><button class=\"ds-no\">No, don't book</button></div></div>",
+      "css": ":host{--green-900:#0b2e22;--green-800:#0f3d2e;--green-700:#17543f;--green-050:#f0f6f2;--yellow:#f6c625;--yellow-deep:#c79a0a;--yellow-050:#fff6d6;--red:#c62f25;--red-050:#fdecea;--amber-ink:#7a4f00;--ground:#fbf8f1;--paper:#fff;--ink:#1a1a17;--ink-2:#4c5049;--ink-3:#5f645b;--rule:#e4dfd2;--rule-strong:#cdc6b4;--on-green:#e8f1ec;--on-green-2:#b9d3c5;--font:\"Barlow\",system-ui,sans-serif;--font-board:\"Barlow Condensed\",\"Barlow\",system-ui,sans-serif;--r-sm:4px;--r:8px;--r-lg:12px;--shadow-1:0 1px 2px rgba(26,26,23,.06),0 2px 6px rgba(26,26,23,.05);--ease-out:cubic-bezier(.16,1,.3,1)} .ds-confirm{max-width:420px;background:var(--paper);border:2px solid var(--red);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow-1);font:400 15px/1.5 var(--font);color:var(--ink)}.ds-confirm p{margin:8px 0 0;font-weight:600}.ds-stamp{display:inline-block;font:700 12px/1 var(--font-board);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px 3px;border:1.5px solid currentColor;border-radius:3px;transform:rotate(-1deg);color:var(--red);background:var(--red-050)}.ds-row{display:flex;gap:8px;margin-top:12px}.ds-go,.ds-no{min-height:40px;padding:0 16px;border-radius:var(--r);font:600 15px/1 var(--font);border:1.5px solid var(--green-800);cursor:pointer}.ds-go{background:var(--green-800);color:#fff}.ds-go:hover{background:var(--green-700)}.ds-no{background:var(--paper);color:var(--green-800)}.ds-no:hover{background:var(--green-050)}.ds-go:focus-visible,.ds-no:focus-visible{outline:3px solid var(--green-800);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Showroom Signboard",
+    "overview": "Maqbool is a working tool dressed in the enamel of a Pakistani dealer's signwriter: a bottle-green shell with a signal-yellow rule along its foot, a warm white ground, condensed capital lettering for anything that names a place, and yellow windscreen price boards hung slightly crooked on every listing. The paint is confined to a few pieces that carry meaning (the brand board, the price boards, the stamped status labels, the vermilion confirm ring). Everything else is a quiet, dense, hairline-ruled working surface.\n\nTwo densities share one world. The customer chat is phone-first and conversational: rounded bubbles, roomy padding, suggestion rows. The staff dashboard is desktop-dense: 14px tables with 9px by 12px cells, sticky uppercase column labels, and hairline rules in place of boxes. Both read from the same tokens. Neither borrows the blue-bubble SaaS chat widget or the grey stat-card admin. The brief rejects both outright.\n\nMotion is utilitarian, with one authored moment. State changes are short colour fades (150ms). The staff side panel slides in (280ms, ease-out). When the bot names a listing, its price boards swing into place like a hung sign. Reduced-motion collapses all of it.",
+    "keyCharacteristics": [
+      "Bottle-green shell with a 4px signal-yellow bottom rule; yellow marks the active tab.",
+      "Barlow Condensed uppercase for board lettering; Barlow for everything people read at length.",
+      "Yellow price boards tilted -1.5deg, short local units big (lakh/crore), exact PKR beneath.",
+      "Visit and lead states as stamped labels tilted -1deg, outlined in their own ink.",
+      "Vermilion is kept for the one item that needs action now.",
+      "Flat surfaces on a warm ground, separated by 1px warm rules; shadow only for lift and overlay."
+    ],
+    "rules": [
+      {
+        "name": "The One Red Thing Rule",
+        "body": "Vermilion marks only what needs a human decision now: the open booking confirm, an armed delete, a visit awaiting staff, an error. It never decorates. If two vermilion things share a screen, both must be live actions.",
+        "section": "colors"
+      },
+      {
+        "name": "The Yellow Is Paint Rule",
+        "body": "Signal yellow is for signboard pieces (price boards, the shell rule, the active tab, the send button). It is never a text colour on the light ground and never a large background field.",
+        "section": "colors"
+      },
+      {
+        "name": "The Board Lettering Rule",
+        "body": "Condensed uppercase is for names of places and things on the board (page titles, panel heads, tabs, prices, stamps). Sentences, buttons and table data stay in Barlow at sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Honest Number Rule",
+        "body": "Every figure people compare (prices, counts, tallies, IDs, exact PKR) uses tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Desk Rule",
+        "body": "Cards, tables and lists rest flat with a 1px rule. Shadow appears on hover, on a selected segment, or on something that really floats or is painted on. It never appears on a surface at rest just to separate it.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Wordmark Shade Exception",
+        "body": "The brand wordmark alone carries a signwriter's stepped drop shade (`2px 2px 0` Bottle Green Deep, `3px 3px 0` #082318). It is the enamel lettering's own device, not a shadow style, and it does not extend to headings, buttons or cards.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** render every price with the Price Board: short local units on yellow, exact PKR (tabular) beneath.",
+      "**Do** show record states as Stamps in one of the five tones; pick the tone by meaning, not decoration.",
+      "**Do** reserve Vermilion (#c62f25) for the single item that needs a human decision now, and pair it with a text label.",
+      "**Do** set page titles, panel heads and tabs in Barlow Condensed uppercase, Bottle Green, and keep sentences and buttons in Barlow.",
+      "**Do** keep admin surfaces dense and hairline-ruled: 14px text, 9px by 12px cells, 1px Rule dividers.",
+      "**Do** confirm destructive actions in place with the armed ConfirmButton rather than a modal.",
+      "**Do** use lucide-react line icons at 16 to 18px, tinted Bottle Green or Ink 3.",
+      "**Do** keep readable text at Ink 3 (#5f645b) or darker on Warm Ground and Paper."
+    ],
+    "donts": [
+      "**Don't** use blue chat bubbles, cool grey neutrals or grey stat cards; the world is green, yellow and warm white.",
+      "**Don't** use Signal Yellow as text on the light ground or as a large background field.",
+      "**Don't** tilt anything except price boards (-1.5deg) and stamps (-1deg).",
+      "**Don't** put shadows on cards or tables at rest, and don't use hard offset shadows on any element except the brand wordmark's drop shade.",
+      "**Don't** fabricate listing photos; listings are typographic cards with a kind icon.",
+      "**Don't** add a second authored animation; the price-board swing is the one moment."
+    ]
+  }
+}
