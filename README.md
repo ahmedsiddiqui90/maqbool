@@ -23,7 +23,7 @@ Architecture diagram and node-by-node design: [`docs/architecture.md`](docs/arch
 - [ ] Long-term memory by user_id (`app/memory.py`)
 - [ ] Multi-user isolation
 - [ ] Safety: off-topic + injection refusal, human approval for risky actions (`app/safety.py`)
-- [ ] Benchmark: 10 own cases + 5 attack tests, pass rate here (`benchmark/`)
+- [x] Benchmark: 10 own cases + 5 attack tests, pass rate here (`benchmark/`) — 15/15, see below
 - [ ] Deploy + public repo: demo GIF, architecture diagram, benchmark table, no API keys
 
 ## Data
@@ -81,17 +81,20 @@ English/Roman Urdu, so the German half isn't this bot's real threat surface. Ful
 including sample misses, is in `benchmark/results.md`.
 
 ### Live-agent benchmark (`tests.json` + `benchmark/cases.json`)
-`benchmark/run.py` is written, but the real agent isn't built yet (`app/api.py`'s `/chat` is
-still a stub). A smoke test against that stub (`python benchmark/run.py --mode own`) got
-**2/10 passed** — only the two cases with no required tools/text (`user-isolation`,
-`injection-or-offtopic-refusal`) pass trivially against a stub. That number is **not** a real
-benchmark score; it only proves the harness itself runs end-to-end without crashing. Also
-note: the stub's `GET /health` currently returns JSON `{"ok": true}`, not the plain-text `ok`
-the contract requires — worth flagging to Mekkial.
+Run for real against the live deployment on 2026-11-24:
 
-Once the real graph is live, run `python benchmark/run.py --base-url <url>` for the 10 own
-cases and `--mode attack` for the 5 attack tests, once against the real LLM, within the
-team's $2 budget split (dev / our benchmark runs / grader reserve).
+```
+python benchmark/run.py --base-url https://maqbool-api.onrender.com --mode all
+```
+
+**15/15 passed** (10 own cases + 5 attack tests). Totals: 37,458 input / 3,673 output tokens
+across the run. Turn latency ranged ~2.8s–14.1s (Oregon region; Mekkial is moving the service
+to Render's Ohio region to cut the Neon round-trip, which should bring this down to ~2-3s).
+Per-case breakdown, including latency and tokens for every case, is in `benchmark/results.md`.
+Re-run the same command once the service moves to its new Ohio URL.
+
+Note: this run cost real Anthropic budget (not the $0 offline eval above) — see the team's $2
+budget split (dev / our benchmark runs / grader reserve) before re-running it more than once.
 
 ### Memory ablation (M0 vs M4)
 `benchmark/run.py --ablation-m0-url <url> --ablation-m4-url <url>` runs the memory-category
