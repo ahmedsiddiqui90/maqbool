@@ -55,7 +55,12 @@ def matches_expected(reply: str, tool_calls: list, expected: dict) -> tuple:
     return (len(reasons) == 0, reasons)
 
 
-def run_case(client: httpx.Client, base_url: str, case: dict) -> dict:
+def run_case(client: httpx.Client, base_url: str, case: dict, run_tag: str) -> dict:
+    """run_tag makes every run's thread_ids unique, so repeated runs against a persistent
+    DB never pick up pending state (an unresolved booking interrupt, etc.) left over from
+    a previous run. Same case, same turn order -> same suffixed thread_id, so multi-turn
+    cases still share one thread; the long-term-recall case's two distinct thread_ids stay
+    distinct."""
     start = time.perf_counter()
     tokens_in = tokens_out = 0
     reply = ""
@@ -68,7 +73,7 @@ def run_case(client: httpx.Client, base_url: str, case: dict) -> dict:
                 f"{base_url}/chat",
                 json={
                     "user_id": turn["user_id"],
-                    "thread_id": turn["thread_id"],
+                    "thread_id": f"{turn['thread_id']}-{run_tag}",
                     "message": turn["message"],
                 },
                 timeout=30,
@@ -102,10 +107,11 @@ def run_case(client: httpx.Client, base_url: str, case: dict) -> dict:
 
 def run_all(base_url: str, mode: str) -> list:
     cases = load_cases(mode)
+    run_tag = str(int(time.time()))
     results = []
     with httpx.Client() as client:
         for source, case in cases:
-            result = run_case(client, base_url, case)
+            result = run_case(client, base_url, case, run_tag)
             result["source"] = source
             results.append(result)
     return results
@@ -151,9 +157,10 @@ def run_ablation(m0_url: str, m4_url: str):
     deployment-level comparison, not a new wire-protocol flag - docs/contracts.md is
     unchanged."""
     own_cases = [c for _, c in load_cases("own") if c["category"] == "memory"]
+    run_tag = str(int(time.time()))
     with httpx.Client() as client:
-        m0 = [run_case(client, m0_url, c) for c in own_cases]
-        m4 = [run_case(client, m4_url, c) for c in own_cases]
+        m0 = [run_case(client, m0_url, c, run_tag) for c in own_cases]
+        m4 = [run_case(client, m4_url, c, run_tag) for c in own_cases]
 
     print("\n## Memory ablation (M0 vs M4)\n")
     print("| Case | M0 passed | M4 passed |")
