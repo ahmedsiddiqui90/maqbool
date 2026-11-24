@@ -57,7 +57,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Maqbool DealCloser", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
+def cors_origins(raw: str | None = None) -> list[str]:
+    """Parse CORS_ORIGINS. Browsers send Origin without a trailing slash, so
+    "https://app.vercel.app/" (a common paste) would never match: strip slashes, spaces and quotes."""
+    raw = os.getenv("CORS_ORIGINS", "*") if raw is None else raw
+    origins = [o.strip().strip('"').strip("'").rstrip("/") for o in raw.split(",")]
+    return [o for o in origins if o] or ["*"]
+
+
+app.add_middleware(CORSMiddleware, allow_origins=cors_origins(),
                    allow_methods=["*"], allow_headers=["*"])
 
 
