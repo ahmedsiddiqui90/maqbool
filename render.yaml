@@ -1,8 +1,9 @@
 # Render Blueprint: New > Blueprint > pick this repo. Secrets are entered in the dashboard.
 services:
   - type: web
-    name: maqbool-api
+    name: maqbool
     runtime: docker
+    region: ohio   # same region as the Neon database: ~45% faster turns than Oregon
     plan: free
     healthCheckPath: /health
     autoDeploy: true
@@ -30,7 +31,7 @@ services:
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://maqbool-api.onrender.com
+        value: https://maqbool.onrender.com
       - key: NODE_VERSION
         value: "22"
     routes:
