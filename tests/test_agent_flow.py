@@ -84,6 +84,15 @@ def test_long_term_recall_new_thread(client):
     assert "5,000,000" in chat(client, u, "tb", "What is my budget?")["reply"]
 
 
+def test_memory_ablation_m0_keeps_short_term_drops_long_term(client, monkeypatch):
+    monkeypatch.setenv("DISABLE_LONG_TERM_MEMORY", "1")
+    u = uid()
+    chat(client, u, "ta", "My budget is 50 lakh and I want a house in Karachi")
+    assert "50 lakh" in chat(client, u, "ta", "What was my budget again?")["reply"]  # checkpointer still works
+    assert client.get(f"/admin/memory/{u}", headers=ADMIN).json() == []  # Store never written
+    assert "5,000,000" not in chat(client, u, "tb", "What is my budget?")["reply"]
+
+
 def test_users_are_isolated_even_with_same_thread_id(client):
     a, b = uid(), uid()
     chat(client, a, "shared", "My budget is 80 lakh")
