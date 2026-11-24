@@ -78,7 +78,7 @@ real run of that command; it also regenerates this section in `benchmark/results
 | Metric | All 662 prompts | English-only subset* |
 |---|---|---|
 | Precision | 1.000 | 1.000 |
-| Recall | 0.125 | 0.167 |
+| Recall | 0.316 | 0.425 |
 | False positives | 0 | 0 |
 
 \* The dataset pairs each English prompt with a German translation; Maqbool's users write
