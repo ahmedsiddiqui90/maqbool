@@ -45,6 +45,21 @@ Response (always status 200, even on internal errors):
   2. On turn 2, the user replies "yes" or "no" in the **same thread**. The reply then says the visit is booked or cancelled. The frontend just shows the reply.
 - **Errors:** the reply is a friendly message such as `"Sorry, something went wrong. Please try again."` with empty `tool_calls` and zero tokens.
 
+### `POST /chat/stream` (optional, additive; used by the website for live progress)
+Same request body and the same turn as `/chat`; `/chat` itself is unchanged and is still what the grader calls.
+The response is `text/event-stream`, one JSON object per `data:` line, in the order things happen:
+
+```
+data: {"type": "thinking"}
+data: {"type": "tool", "name": "search_listings", "args": {"max_price": 6000000, "kind": "car"}}
+data: {"type": "tool_done", "name": "search_listings"}
+data: {"type": "done", "result": {"reply": "...", "tool_calls": [...], "tokens": {"in": 812, "out": 143}}}
+```
+
+- `done` is always the last event, and `result` is exactly the `/chat` response.
+- A blocked or refused turn sends only `done` (zero tokens).
+- Clients that can't stream should call `/chat`; the website falls back to it automatically.
+
 ### `GET /listings` (public; used by the customer page grid)
 ```json
 [{"id": "c-002", "kind": "car", "title": "2019 Honda Civic, 45k km", "city": "Lahore", "price": 5400000, "details": "Automatic, petrol, white"}]
