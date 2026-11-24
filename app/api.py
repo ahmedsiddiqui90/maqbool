@@ -1,7 +1,9 @@
-"""FastAPI backend: graded /chat + /health, public /listings, token-protected /admin/*."""
+"""FastAPI backend: graded /chat + /health, /chat/stream progress events, public /listings, token-protected /admin/*."""
 import hmac
+import json
 import logging
 import os
+import queue
 import threading
 from contextlib import asynccontextmanager
 from urllib.parse import quote
@@ -9,7 +11,7 @@ from urllib.parse import quote
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, StreamingResponse
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.types import Command
 from pydantic import BaseModel
@@ -84,7 +86,36 @@ def health():
 
 @app.post("/chat")
 def chat(body: ChatIn):
-    rec = TurnRecorder()
+    return _turn(body, TurnRecorder())
+
+
+@app.post("/chat/stream")
+def chat_stream(body: ChatIn):
+    """Same turn as /chat, plus live progress as server-sent events (one JSON object per event):
+    {"type":"thinking"} | {"type":"tool","name","args"} | {"type":"tool_done","name"} |
+    {"type":"done","result":<exactly the /chat response>}. /chat itself is unchanged."""
+    events: queue.Queue = queue.Queue()
+
+    def work():
+        try:
+            events.put({"type": "done", "result": _turn(body, TurnRecorder(emit=events.put))})
+        except Exception:  # _turn already returns a fallback; this is belt and braces
+            events.put({"type": "done", "result": {"reply": FALLBACK_REPLY, "tool_calls": [], "tokens": {"in": 0, "out": 0}}})
+
+    threading.Thread(target=work, daemon=True).start()
+
+    def sse():
+        while True:
+            event = events.get()
+            yield "data: " + json.dumps(event, default=str) + "\n\n"
+            if event["type"] == "done":
+                return
+
+    return StreamingResponse(sse(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+def _turn(body: ChatIn, rec: TurnRecorder) -> dict:
     try:
         uid, tid, message = _ident(body.user_id), _ident(body.thread_id), body.message.strip()[:2000]
         if not uid or not tid or not message:
