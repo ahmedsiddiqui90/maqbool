@@ -256,3 +256,20 @@ def test_rrf_fuses_rank_lists():
 
 def test_rrf_empty_input():
     assert rrf([]) == []
+
+
+# ---- wider off-topic guard (free refusals) --------------------------------------------------
+
+def test_offtopic_new_phrases_blocked():
+    for t in ("Write a python script that scrapes a website", "What is the capital of France?",
+              "Give me medical advice for my headache", "Can you help me file my income tax return?",
+              "any bitcoin tips?", "recommend a movie for tonight"):
+        assert is_off_topic(t), t
+
+
+def test_offtopic_never_blocks_real_dealer_questions():
+    for t in ("I'm a doctor looking for a house in Lahore", "My tax refund arrives next month, what car can I afford?",
+              "Is there a movie theatre near the Bahria Town plot?", "financing for a python-green Corolla",
+              "what is the capital I need as down payment", "book a test drive tomorrow", "yes", "hello",
+              "mujhe 50 lakh tak ki gaari chahiye", "what documents do I need?"):
+        assert not is_off_topic(t), t
