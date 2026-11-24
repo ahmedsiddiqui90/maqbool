@@ -7,7 +7,7 @@ Built for the AI-4016 Agentic AI hackathon (track 3: DealCloser). Model: `claude
 | | |
 |---|---|
 | **Website** (customer chat + staff dashboard at `/staff`) | https://maqbool-web.onrender.com |
-| **Agent API** | https://maqbool-api.onrender.com (`GET /health`, `POST /chat`) |
+| **Agent API** | https://maqbool.onrender.com (`GET /health`, `POST /chat`) |
 | **Demo video** | _TODO: add YouTube (unlisted) link_ |
 | **Demo GIF** | _TODO: add `docs/demo.gif`_ |
 | **Paper canvas photo** | _TODO: add Drive link_ |
@@ -140,13 +140,14 @@ including sample misses, is in `benchmark/results.md`.
 Run for real against the live deployment on 2026-11-24:
 
 ```
-python benchmark/run.py --base-url https://maqbool-api.onrender.com --mode all
+python benchmark/run.py --base-url https://maqbool.onrender.com --mode all
 ```
 
 **15/15 passed** (10 own cases + 5 attack tests). Totals: 37,458 input / 3,673 output tokens
 across the run. Turn latency ranged ~2.8s–14.1s (cold start and the first turn after idle are the slowest;
-the Render service runs in Oregon while Neon is in Ohio, so each turn pays several cross-region
-database round trips).
+measured while the API still ran in Oregon). The API now runs in Render's Ohio region, next to
+Neon (also Ohio): in a back-to-back check on 24 Nov, tool turns took ~2.4 s (Oregon: 4.3 s),
+no-tool turns ~1.7 s (2.7 s) and refused requests ~0.3 s (1.0 s).
 Per-case breakdown, including latency and tokens for every case, is in `benchmark/results.md`.
 
 Note: this run cost real Anthropic budget (not the $0 offline eval above) — see the team's $2
