@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { VISIT_STATUS, ago, fullDate } from "../format.js";
-import { ConfirmButton, Stamp } from "../ui/bits.jsx";
+import { ConfirmButton, PersonButton, Stamp } from "../ui/bits.jsx";
 
 const TONE = { booked: "stop", confirmed: "go", cancelled: "muted" };
 
@@ -10,15 +10,17 @@ export default function VisitsTable({ visits, onSetStatus, onOpenLead, compact =
   const [filter, setFilter] = useState(awaiting && !compact ? "booked" : "");
   const [busy, setBusy] = useState(null);
   const [error, setError] = useState("");
+  const [landed, setLanded] = useState(null); // visit whose stamp just changed
 
   const rows = [...visits]
-    .filter((v) => !filter || v.status === filter)
+    // a visit just confirmed/cancelled stays in view (with its new stamp) until the filter changes
+    .filter((v) => !filter || v.status === filter || v.id === landed)
     // waiting-for-staff first, then newest first
     .sort((a, b) => (b.status === "booked") - (a.status === "booked") || String(b.created_at).localeCompare(String(a.created_at)));
 
   async function act(v, status) {
     setBusy(v.id); setError("");
-    try { await onSetStatus(v.id, status); }
+    try { await onSetStatus(v.id, status); setLanded(v.id); }
     catch (e) { setError(`Couldn't update visit #${v.id}: ${e.message}`); }
     finally { setBusy(null); }
   }
@@ -49,7 +51,7 @@ export default function VisitsTable({ visits, onSetStatus, onOpenLead, compact =
               <div className="visit-line"><span className="cell-strong">{v.listing_title}</span> <span className="muted">{v.listing_id}</span></div>
               <div className="visit-line visit-meta">
                 <span>{v.when}</span>
-                <Stamp tone={TONE[v.status]}>{VISIT_STATUS[v.status] || v.status}</Stamp>
+                <Stamp key={v.status} tone={TONE[v.status]} className={landed === v.id ? "stamp-land" : ""}>{VISIT_STATUS[v.status] || v.status}</Stamp>
                 <span className="visit-actions">{actions(v)}</span>
               </div>
             </li>
@@ -64,8 +66,8 @@ export default function VisitsTable({ visits, onSetStatus, onOpenLead, compact =
       {!compact && (
         <div className="table-tools">
           <div className="segmented" role="group" aria-label="Filter visits">
-            <button type="button" aria-pressed={filter === "booked"} onClick={() => setFilter("booked")}>To confirm <span className="count">{awaiting}</span></button>
-            <button type="button" aria-pressed={filter === ""} onClick={() => setFilter("")}>All <span className="count">{visits.length}</span></button>
+            <button type="button" aria-pressed={filter === "booked"} onClick={() => { setFilter("booked"); setLanded(null); }}>To confirm <span className="count">{awaiting}</span></button>
+            <button type="button" aria-pressed={filter === ""} onClick={() => { setFilter(""); setLanded(null); }}>All <span className="count">{visits.length}</span></button>
           </div>
           <span className="table-hint">Customers have already said yes in chat. Confirm once the slot is arranged.</span>
         </div>
@@ -98,10 +100,10 @@ export default function VisitsTable({ visits, onSetStatus, onOpenLead, compact =
                   {!compact && <td className="num">{v.id}</td>}
                   <th scope="row"><span className="cell-strong">{v.listing_title}</span> <span className="muted">{v.listing_id}</span></th>
                   {!compact && (
-                    <td><button type="button" className="link" onClick={() => onOpenLead(v.user_id)}>{v.user_id}</button></td>
+                    <td><PersonButton id={v.user_id} onClick={() => onOpenLead(v.user_id)} /></td>
                   )}
                   <td>{v.when}</td>
-                  <td><Stamp tone={TONE[v.status]}>{VISIT_STATUS[v.status] || v.status}</Stamp></td>
+                  <td><Stamp key={v.status} tone={TONE[v.status]} className={landed === v.id ? "stamp-land" : ""}>{VISIT_STATUS[v.status] || v.status}</Stamp></td>
                   {!compact && <td title={fullDate(v.created_at)}>{ago(v.created_at)}</td>}
                   <td className="actions">{actions(v)}</td>
                 </tr>

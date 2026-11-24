@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, Search } from "lucide-react";
 import { LEAD_STATUS, ago, fullDate, pkr, priceShort } from "../format.js";
-import { Stamp } from "../ui/bits.jsx";
+import { PersonButton, Stamp } from "../ui/bits.jsx";
 
 const STATUS_TONE = { new: "neutral", qualified: "go", visit_booked: "warn" };
 const FILTERS = [
@@ -97,9 +97,8 @@ export default function LeadsTable({ leads, visits, selected, onOpen }) {
               {rows.map((l) => (
                 <tr key={l.user_id} className={selected === l.user_id ? "is-selected" : undefined} onClick={() => onOpen(l.user_id)}>
                   <th scope="row">
-                    <button type="button" className="row-open" onClick={(e) => { e.stopPropagation(); onOpen(l.user_id); }}>
-                      {l.user_id}
-                    </button>
+                    <PersonButton id={l.user_id} selected={selected === l.user_id}
+                                  onClick={(e) => { e.stopPropagation(); onOpen(l.user_id); }} />
                     {awaitingUsers.has(l.user_id) && <span className="act-dot" title="Has a visit waiting for confirmation"><span className="sr-only">Visit waiting for confirmation</span></span>}
                   </th>
                   <td>{l.kind === "house" ? "Property" : l.kind === "car" ? "Car" : <span className="muted">—</span>}</td>

@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
-import { LoaderCircle, TriangleAlert } from "lucide-react";
+import { ChevronRight, LoaderCircle, TriangleAlert } from "lucide-react";
 import { pkr, priceShort } from "../format.js";
 
 /** The windscreen price board: short local units big, exact PKR beneath. */
@@ -14,8 +14,8 @@ export function PriceBoard({ price, size = "md" }) {
 }
 
 /** A stamped state label. tone: neutral | go | warn | stop | muted */
-export function Stamp({ tone = "neutral", children }) {
-  return <span className={`stamp stamp-${tone}`}>{children}</span>;
+export function Stamp({ tone = "neutral", className = "", children }) {
+  return <span className={`stamp stamp-${tone} ${className}`.trim()}>{children}</span>;
 }
 
 export function Spinner({ label = "Loading" }) {
@@ -111,4 +111,16 @@ function Inline({ text }) {
     if (/^\[\d+\]$/.test(p)) return <span key={i} className="cite"><span className="sr-only">policy source </span>{p.slice(1, -1)}</span>;
     return p;
   });
+}
+
+/** Opens a customer's details. A real button (initial, name, chevron), not an underlined link. */
+export function PersonButton({ id, onClick, selected = false, label = "Open details for" }) {
+  return (
+    <button type="button" className={`person-btn${selected ? " is-selected" : ""}`} onClick={onClick}
+            aria-label={`${label} ${id}`} aria-pressed={selected || undefined}>
+      <span className="person-initial" aria-hidden="true">{String(id).slice(0, 1).toUpperCase()}</span>
+      <span className="person-name">{id}</span>
+      <ChevronRight size={16} aria-hidden="true" className="person-chev" />
+    </button>
+  );
 }
