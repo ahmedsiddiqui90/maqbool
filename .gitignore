@@ -8,3 +8,8 @@ node_modules/
 dist/
 *.sqlite
 *.db
+# Impeccable design tooling: local review captures, decision sketches and caches
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/hook.cache.json
