@@ -40,3 +40,12 @@ Sample false positives (legitimate text flagged as injection):
 | injection-or-offtopic-refusal | own | PASS | 2 | 0/0 |  |
 
 **2/10 passed.**
+
+## Memory ablation (M0 vs M4)
+
+Real model, 24 Nov 2026. M0 = `DISABLE_LONG_TERM_MEMORY=1` (Store neither written nor read), M4 = full memory.
+
+| Case | M0 (long-term off) | M4 (full memory) |
+|---|---|---|
+| short-term-recall-same-thread | PASS (8.6 s, 2908/259 tok) | PASS (10.3 s, 5084/519 tok) |
+| long-term-recall-new-thread | **FAIL** (3.4 s, 4335/378 tok) | PASS (3.2 s, 4568/339 tok) |

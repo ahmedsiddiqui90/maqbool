@@ -94,6 +94,26 @@ cases and `--mode attack` for the 5 attack tests, once against the real LLM, wit
 team's $2 budget split (dev / our benchmark runs / grader reserve).
 
 ### Memory ablation (M0 vs M4)
-`benchmark/run.py --ablation-m0-url <url> --ablation-m4-url <url>` runs the memory-category
-own cases against two separately-configured deployments (memory writer off vs on) and prints
-a pass/fail comparison. Not yet run — needs two live deployments first.
+Run on 24 Nov 2026 with the real model (`claude-haiku-5-5`) against two local backends, each on
+its own fresh Postgres database. M0 sets `DISABLE_LONG_TERM_MEMORY=1`, so the Store is never
+written or read; short-term memory (checkpointer + pinned state fields) stays on. M4 is the
+normal configuration.
+
+| Case | M0 (long-term off) | M4 (full memory) |
+|---|---|---|
+| short-term-recall-same-thread | PASS (8.6 s, 2908/259 tok) | PASS (10.3 s, 5084/519 tok) |
+| long-term-recall-new-thread | **FAIL** (3.4 s, 4335/378 tok) | PASS (3.2 s, 4568/339 tok) |
+
+- **Same thread:** both pass. Recall here comes from the checkpointer and pinned state, not the Store.
+- **New thread:** only M4 passes. M0 replied "I don't have your budget saved…" and stored 0
+  memories. M4 replied "Your budget is PKR 5,000,000 (50 lakh)… a house, preferably in Karachi"
+  from 3 stored memories (budget, kind, city).
+- **So** cross-thread recall is caused by the long-term Store write/read path, not by luck or
+  leftover context. Cost of the whole run: 16.9k input / 1.5k output tokens.
+
+Reproduce (two terminals, then the runner):
+```bash
+DISABLE_LONG_TERM_MEMORY=1 DATABASE_URL=<db_m0> uvicorn app.api:app --port 8001
+DATABASE_URL=<db_m4> uvicorn app.api:app --port 8002
+python benchmark/run.py --ablation-m0-url http://127.0.0.1:8001 --ablation-m4-url http://127.0.0.1:8002
+```
