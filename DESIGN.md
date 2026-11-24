@@ -179,7 +179,7 @@ Maqbool is a working tool dressed in the enamel of a Pakistani dealer's signwrit
 
 Two densities share one world. The customer chat is phone-first and conversational: rounded bubbles, roomy padding, suggestion rows. The staff dashboard is desktop-dense: 14px tables with 9px by 12px cells, sticky uppercase column labels, and hairline rules in place of boxes. Both read from the same tokens. Neither borrows the blue-bubble SaaS chat widget or the grey stat-card admin. The brief rejects both outright.
 
-Motion is utilitarian, with one authored moment. State changes are short colour fades (150ms). The staff side panel slides in (280ms, ease-out). When the bot names a listing, its price boards swing into place like a hung sign. Reduced-motion collapses all of it.
+Motion is utilitarian, with one authored moment. State changes are short colour fades (150ms); messages and transcript steps settle in (220-240ms); the staff side panel slides in (280ms, ease-out). The authored moment is the hung sign: when the bot names a listing, its price boards swing into place in the chat, and on the lot the same card is brought into view with a yellow ring that settles while its board swings again. A status stamp that just changed lands like a rubber stamp. Reduced-motion collapses all of it.
 
 **Key Characteristics:**
 - Bottle-green shell with a 4px signal-yellow bottom rule; yellow marks the active tab.
@@ -302,6 +302,15 @@ The bot's yes/no turn: Paper, 2px Vermilion ring, 12px corners, Lift shadow, a s
 - **Tool trail:** under bot replies, small Green Mist pills with a green-tinted border, a lucide icon and a 12px label ("Searched listings"). This is how the system shows what the bot did.
 - **Typing:** three 7px Bottle Green Lit dots bobbing 3px, with a label.
 
+### Live Transcript
+While a turn runs, a dashed-outline Paper bubble lists what Maqbool is doing, from real `/chat/stream` events: "Thinking", then each tool with a plain-language detail ("Searching listings · cars under 60 lakh in Lahore"). Active steps carry a spinning ring; finished steps turn into a filled Bottle Green check disc and drop to Ink 2. Without streaming it shows only "Thinking" plus the slow-server note, never a tool it hasn't seen. After the reply lands, the same tools stay under the message as the tool trail, with their detail line.
+
+### Listing Plate and Preview
+Listing cards open with an illustrated plate (2:1, flush to the card's top edge) of the body type in the listing's colour on a Green Mist or cream ground. In chat, a named listing appears as a preview row: a 76px plate thumbnail, title, id and city, a small price board, and a quiet "Show" button that brings the card into view on the lot. Cards named in the latest reply carry an "In your chat" go-stamp and a 1px Bottle Green ring.
+
+### Person Button
+A pill with a 24px Bottle Green disc holding the initial in Signal Yellow condensed lettering, the customer id in 600 weight, and a chevron that nudges right on hover. Hover fills Green Mist with a Bottle Green border; the open customer gets a 1px Bottle Green ring.
+
 ### Cards / Containers
 - **Corner Style:** 12px on listing cards, tables, confirm and gate cards; 8px on mentions, facts grids, memory and thread lists.
 - **Background:** Paper on Warm Ground.
@@ -324,7 +333,7 @@ A Track Sand track with 3px padding and 2px gaps, holding 34px options in 600 we
 - **Mobile:** the shell stays one row with short labels. The customer area adds the Chat / Listings pane switch.
 
 ### Data Table
-Paper inside a 1px Rule, 12px-cornered wrap. 14px text, 9px by 12px cells, 1px Rule row dividers, no zebra striping. The sticky head sits on #f7f3ea with 12px 600 uppercase Ink 2 labels and a Rule Strong underline. Row hover is Green Mist; the selected row is Yellow Cream. The customer name is an underline-on-hover green link. A 8px vermilion dot flags rows that need action. Numeric columns are right-aligned and tabular.
+Paper inside a 1px Rule, 12px-cornered wrap. 14px text, 9px by 12px cells, 1px Rule row dividers, no zebra striping. The sticky head sits on #f7f3ea with 12px 600 uppercase Ink 2 labels and a Rule Strong underline. Row hover is Green Mist; the selected row is Yellow Cream. The customer cell is a person button (a green initial disc, the name, a chevron), never an underlined text link. A 8px vermilion dot flags rows that need action. Numeric columns are right-aligned and tabular.
 
 ## Do's and Don'ts
 
@@ -343,5 +352,6 @@ Paper inside a 1px Rule, 12px-cornered wrap. 14px text, 9px by 12px cells, 1px R
 - **Don't** use Signal Yellow as text on the light ground or as a large background field.
 - **Don't** tilt anything except price boards (-1.5deg) and stamps (-1deg).
 - **Don't** put shadows on cards or tables at rest, and don't use hard offset shadows on any element except the brand wordmark's drop shade.
-- **Don't** fabricate listing photos; listings are typographic cards with a kind icon.
-- **Don't** add a second authored animation; the price-board swing is the one moment.
+- **Don't** fabricate listing photos. Cards carry an illustrated plate of the body type (sedan, hatchback, SUV, house, apartment, plot) painted in the listing's colour; it is a drawing, never presented as the actual car or property.
+- **Don't** add a second authored animation; the price-board swing (and the lot spotlight that repeats it) is the one moment. Everything else is feedback.
+- **Don't** use underlined text links as controls inside the app; actions are buttons.
