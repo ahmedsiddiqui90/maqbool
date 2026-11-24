@@ -93,6 +93,19 @@ Once the real graph is live, run `python benchmark/run.py --base-url <url>` for 
 cases and `--mode attack` for the 5 attack tests, once against the real LLM, within the
 team's $2 budget split (dev / our benchmark runs / grader reserve).
 
+### Policy retrieval (offline, $0 — see `benchmark/eval_rag.py`)
+10 customer-style questions, each hand-labelled with the policy section that answers it
+(`benchmark/data/rag_eval.json`), run through `search_policies`' ranking with no LLM calls.
+
+| Mode | Recall@1 | Recall@3 | MRR |
+|---|---|---|---|
+| BM25 only (`DISABLE_EMBEDDINGS=1`) | 0.50 | 0.80 | 0.66 |
+| BM25 + dense, RRF (as deployed) | not yet run (needs the one-time `bge-small` download) | | |
+
+Misses come from overlap with the site-visit section: "paperwork to buy a house" ranks the
+right section 7th and "reschedule my visit, is there a fee?" ranks it 9th, because "house"/"visit"
+pull the site-visit chunk to the top. Per-question ranks are in `benchmark/results.md`.
+
 ### Memory ablation (M0 vs M4)
 `benchmark/run.py --ablation-m0-url <url> --ablation-m4-url <url>` runs the memory-category
 own cases against two separately-configured deployments (memory writer off vs on) and prints

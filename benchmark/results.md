@@ -40,3 +40,26 @@ Sample false positives (legitimate text flagged as injection):
 | injection-or-offtopic-refusal | own | PASS | 2 | 0/0 |  |
 
 **2/10 passed.**
+
+## Policy retrieval (offline)
+
+`app.rag.search` on 10 hand-labelled questions (`benchmark/data/rag_eval.json`), retrieval mode: **BM25 only**. No LLM calls; $0. Run: `python benchmark/eval_rag.py`.
+
+| Metric | Value |
+|---|---|
+| Recall@1 | 0.50 |
+| Recall@3 | 0.80 |
+| MRR | 0.66 |
+
+| Question | Expected section | Rank | Top hit |
+|---|---|---|---|
+| What do I need to bring to buy a car? | documents-required.md :: For a Car Purchase | 3 | test-drives-and-visits.md :: Booking a Site Visit |
+| What paperwork is needed to buy a house? | documents-required.md :: For a Property Purchase | 7 | test-drives-and-visits.md :: Booking a Site Visit |
+| Which banks can finance my purchase? | financing.md :: Partner Banks | 1 | financing.md :: Partner Banks |
+| How much do I have to pay upfront for a property loan? | financing.md :: Standard Terms | 1 | financing.md :: Standard Terms |
+| What salary do I need to qualify for car financing? | financing.md :: Eligibility | 2 | documents-required.md :: For a Car Purchase |
+| Can I test drive a car on Sunday? | test-drives-and-visits.md :: Booking a Test Drive | 1 | test-drives-and-visits.md :: Booking a Test Drive |
+| I need to reschedule my visit, is there a fee? | test-drives-and-visits.md :: Cancellation | 9 | test-drives-and-visits.md :: Booking a Site Visit |
+| How much deposit holds a flat for me? | token-money-and-refunds.md :: Token Money | 1 | token-money-and-refunds.md :: Token Money |
+| Will I get my token money back if I change my mind? | token-money-and-refunds.md :: Refunds | 2 | token-money-and-refunds.md :: Non-Refundable Cases |
+| Does a 2022 car come with any guarantee on the engine? | warranty.md :: Cars | 1 | warranty.md :: Cars |
