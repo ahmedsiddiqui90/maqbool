@@ -137,17 +137,27 @@ English/Roman Urdu, so the German half isn't this bot's real threat surface. Ful
 including sample misses, is in `benchmark/results.md`.
 
 ### Live-agent benchmark (`tests.json` + `benchmark/cases.json`)
-Run for real against the live deployment on 2026-11-24:
+Re-run for real against the Ohio deployment on 2026-11-24, after the region move and the
+speed/memory changes:
 
 ```
 python benchmark/run.py --base-url https://maqbool.onrender.com --mode all
 ```
 
-**15/15 passed** (10 own cases + 5 attack tests). Totals: 37,458 input / 3,673 output tokens
-across the run. Turn latency ranged ~2.8s–14.1s (cold start and the first turn after idle are the slowest;
-measured while the API still ran in Oregon). The API now runs in Render's Ohio region, next to
-Neon (also Ohio): in a back-to-back check on 24 Nov, tool turns took ~2.4 s (Oregon: 4.3 s),
-no-tool turns ~1.7 s (2.7 s) and refused requests ~0.3 s (1.0 s).
+**15/15 passed** (10 own cases + 5 attack tests). Totals: 38,642 input / 3,858 output tokens
+across the run. Turn latency ranged ~0.3s (refused, 0 tokens) to ~4.4s (full tool-calling
+turns) — in line with Mekkial's Ohio-region numbers below.
+
+The first re-run after the region move actually came back 13/15, but both failures turned out
+to be a **test-harness bug**, not a product regression: `tests.json`/`cases.json` used fixed
+`thread_id`s, and re-running the benchmark against the same persistent Neon DB reused threads
+left mid-interrupt by the previous run. `benchmark/run.py` now suffixes every `thread_id` with
+a per-run timestamp (`run_case`'s `run_tag`), so each run starts on fresh threads regardless of
+what a previous run left behind. Re-running after that fix gave the clean 15/15 above.
+
+Mekkial's own back-to-back region check (24 Nov): tool turns ~2.4s (Oregon: 4.3s), no-tool
+turns ~1.7s (2.7s), refused requests ~0.3s (1.0s).
+
 Per-case breakdown, including latency and tokens for every case, is in `benchmark/results.md`.
 
 Note: this run cost real Anthropic budget (not the $0 offline eval above) — see the team's $2
