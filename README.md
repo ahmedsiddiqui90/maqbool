@@ -3,6 +3,49 @@
 Replies to new leads within a minute, qualifies budget and timeline, follows up, and books site visits or test drives.
 Built for the AI-4016 Agentic AI hackathon (track 3: DealCloser). Model: `claude-haiku-5-5`.
 
+## Live links
+| | |
+|---|---|
+| **Website** (customer chat + staff dashboard at `/staff`) | https://maqbool-web.onrender.com |
+| **Agent API** | https://maqbool-api.onrender.com (`GET /health`, `POST /chat`) |
+| **Demo video** | _TODO: add YouTube (unlisted) link_ |
+| **Demo GIF** | _TODO: add `docs/demo.gif`_ |
+| **Paper canvas photo** | _TODO: add Drive link_ |
+
+Hosting: API on Render (Docker, free tier), website on Render (static site), Postgres on Neon
+(checkpointer + long-term Store + listings/visits/leads). The free tier sleeps after ~15 min idle,
+so an uptime ping on `/health` keeps the first request fast.
+
+## Architecture
+Generated from the compiled LangGraph (`graph.get_graph().draw_mermaid()`). `guard`, `qualifier`,
+`router` and `memory_writer` are rule-based (0 tokens); only `sales` and `booking` call Claude.
+
+```mermaid
+graph TD;
+	__start__([<p>__start__</p>])
+	guard(guard)
+	qualifier(qualifier)
+	sales(sales)
+	booking(booking)
+	refuse(refuse)
+	memory_writer(memory_writer)
+	__end__([<p>__end__</p>])
+	__start__ --> guard;
+	booking --> memory_writer;
+	guard --> qualifier;
+	qualifier -.-> booking;
+	qualifier -.-> refuse;
+	qualifier -.-> sales;
+	sales --> memory_writer;
+	memory_writer --> __end__;
+	refuse --> __end__;
+```
+
+```
+Browser -> Render static site -> FastAPI (Render) -> LangGraph -> tools (listings SQL, financing,
+policy RAG, booking) ; Postgres (Neon): checkpoints per thread, Store per user
+```
+
 ## Setup
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
@@ -29,7 +72,8 @@ Architecture diagram and node-by-node design: [`docs/architecture.md`](docs/arch
 - [x] Multi-user isolation (`rules.thread_key`, per-user Store namespace)
 - [x] Safety: off-topic + injection refusal, human approval for risky actions (`app/safety.py`, `book_visit` interrupt)
 - [x] Benchmark: 10 own cases + 5 attack tests, pass rate here (`benchmark/`) — 15/15, see below
-- [ ] Deploy + public repo: demo GIF, architecture diagram, benchmark table, no API keys. Backend live on Render; frontend not deployed yet
+- [x] Deploy: API and website live on Render, Postgres on Neon (see Live links); architecture diagram and benchmark table above/below; no API keys in the repo
+- [ ] Demo GIF + demo video + canvas photo (links in Live links)
 
 ## Data
 All listings and dealer policies in `data/` are **synthetic**, hand-authored for this project
@@ -100,10 +144,10 @@ python benchmark/run.py --base-url https://maqbool-api.onrender.com --mode all
 ```
 
 **15/15 passed** (10 own cases + 5 attack tests). Totals: 37,458 input / 3,673 output tokens
-across the run. Turn latency ranged ~2.8s–14.1s (Oregon region; Mekkial is moving the service
-to Render's Ohio region to cut the Neon round-trip, which should bring this down to ~2-3s).
+across the run. Turn latency ranged ~2.8s–14.1s (cold start and the first turn after idle are the slowest;
+the Render service runs in Oregon while Neon is in Ohio, so each turn pays several cross-region
+database round trips).
 Per-case breakdown, including latency and tokens for every case, is in `benchmark/results.md`.
-Re-run the same command once the service moves to its new Ohio URL.
 
 Note: this run cost real Anthropic budget (not the $0 offline eval above) — see the team's $2
 budget split (dev / our benchmark runs / grader reserve) before re-running it more than once.
