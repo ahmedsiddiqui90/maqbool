@@ -1,0 +1,12 @@
+[
+  {"q": "What do I need to bring to buy a car?", "source": "documents-required.md", "section": "For a Car Purchase"},
+  {"q": "What paperwork is needed to buy a house?", "source": "documents-required.md", "section": "For a Property Purchase"},
+  {"q": "Which banks can finance my purchase?", "source": "financing.md", "section": "Partner Banks"},
+  {"q": "How much do I have to pay upfront for a property loan?", "source": "financing.md", "section": "Standard Terms"},
+  {"q": "What salary do I need to qualify for car financing?", "source": "financing.md", "section": "Eligibility"},
+  {"q": "Can I test drive a car on Sunday?", "source": "test-drives-and-visits.md", "section": "Booking a Test Drive"},
+  {"q": "I need to reschedule my visit, is there a fee?", "source": "test-drives-and-visits.md", "section": "Cancellation"},
+  {"q": "How much deposit holds a flat for me?", "source": "token-money-and-refunds.md", "section": "Token Money"},
+  {"q": "Will I get my token money back if I change my mind?", "source": "token-money-and-refunds.md", "section": "Refunds"},
+  {"q": "Does a 2022 car come with any guarantee on the engine?", "source": "warranty.md", "section": "Cars"}
+]

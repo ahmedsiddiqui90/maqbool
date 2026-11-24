@@ -54,3 +54,27 @@ Real model, 24 Nov 2026. M0 = `DISABLE_LONG_TERM_MEMORY=1` (Store neither writte
 |---|---|---|
 | short-term-recall-same-thread | PASS (8.6 s, 2908/259 tok) | PASS (10.3 s, 5084/519 tok) |
 | long-term-recall-new-thread | **FAIL** (3.4 s, 4335/378 tok) | PASS (3.2 s, 4568/339 tok) |
+
+## Policy retrieval (offline)
+
+`app.rag.search` on 10 hand-labelled questions (`benchmark/data/rag_eval.json`), retrieval mode: **BM25 + dense (bge-small), RRF**. No LLM calls; $0. Run: `python benchmark/eval_rag.py`.
+
+| Mode | Recall@1 | Recall@3 | MRR |
+|---|---|---|---|
+| BM25 only (`--bm25-only`) | 0.50 | 0.80 | 0.66 |
+| BM25 + dense, RRF (as deployed) | **0.70** | **1.00** | **0.85** |
+
+Per-question ranks below are for the deployed hybrid mode.
+
+| Question | Expected section | Rank | Top hit |
+|---|---|---|---|
+| What do I need to bring to buy a car? | documents-required.md :: For a Car Purchase | 1 | documents-required.md :: For a Car Purchase |
+| What paperwork is needed to buy a house? | documents-required.md :: For a Property Purchase | 1 | documents-required.md :: For a Property Purchase |
+| Which banks can finance my purchase? | financing.md :: Partner Banks | 1 | financing.md :: Partner Banks |
+| How much do I have to pay upfront for a property loan? | financing.md :: Standard Terms | 1 | financing.md :: Standard Terms |
+| What salary do I need to qualify for car financing? | financing.md :: Eligibility | 2 | documents-required.md :: For a Car Purchase |
+| Can I test drive a car on Sunday? | test-drives-and-visits.md :: Booking a Test Drive | 1 | test-drives-and-visits.md :: Booking a Test Drive |
+| I need to reschedule my visit, is there a fee? | test-drives-and-visits.md :: Cancellation | 2 | test-drives-and-visits.md :: Booking a Site Visit |
+| How much deposit holds a flat for me? | token-money-and-refunds.md :: Token Money | 1 | token-money-and-refunds.md :: Token Money |
+| Will I get my token money back if I change my mind? | token-money-and-refunds.md :: Refunds | 2 | token-money-and-refunds.md :: Non-Refundable Cases |
+| Does a 2022 car come with any guarantee on the engine? | warranty.md :: Cars | 1 | warranty.md :: Cars |

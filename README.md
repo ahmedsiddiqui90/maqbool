@@ -108,6 +108,20 @@ Re-run the same command once the service moves to its new Ohio URL.
 Note: this run cost real Anthropic budget (not the $0 offline eval above) — see the team's $2
 budget split (dev / our benchmark runs / grader reserve) before re-running it more than once.
 
+### Policy retrieval (offline, $0 — see `benchmark/eval_rag.py`)
+10 customer-style questions, each hand-labelled with the policy section that answers it
+(`benchmark/data/rag_eval.json`), run through `search_policies`' ranking with no LLM calls.
+
+| Mode | Recall@1 | Recall@3 | MRR |
+|---|---|---|---|
+| BM25 only (`DISABLE_EMBEDDINGS=1`) | 0.50 | 0.80 | 0.66 |
+| BM25 + dense, RRF (as deployed) | **0.70** | **1.00** | **0.85** |
+
+With BM25 alone, "paperwork to buy a house" ranks the right section 7th and "reschedule my
+visit, is there a fee?" ranks it 9th, because "house"/"visit" pull the site-visit chunk to the top.
+Adding the dense model (bge-small, local, $0) fixes both (1st and 2nd), so every question's answer
+is in the top 3 the agent receives. Per-question ranks are in `benchmark/results.md`.
+
 ### Memory ablation (M0 vs M4)
 Run on 24 Nov 2026 with the real model (`claude-haiku-5-5`) against two local backends, each on
 its own fresh Postgres database. M0 sets `DISABLE_LONG_TERM_MEMORY=1`, so the Store is never
